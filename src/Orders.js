@@ -18,6 +18,8 @@ const Orders = ({ orders, products, lineItems })=> {
                       return (
                         <li key={ lineItem.id }>
                           { product ? product.name: '' }
+                          ({lineItem.quantity})
+                          ${lineItem.quantity * product.price}                        
                         </li>
                       );
                     })

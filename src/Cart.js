@@ -11,11 +11,8 @@ const Cart = ({ updateOrder, removeFromCart, lineItems, cart, products,updateLin
             const product = products.find(product => product.id === lineItem.product_id) || {};
             sum += product.price*lineItem.quantity;
             return (
-              <li key={ lineItem.id } className='flex'>
-
-                <span className='double'>
-                { product.name.length < 20 ? product.name : product.name.substring(1,20)+"..." }
-                </span>
+              <li key={ lineItem.id }>
+                {product.name}
                 <span>
                 <button onClick={ lineItem.quantity===1 ? ()=> removeFromCart(lineItem) : ()=> decreaseLineItem(lineItem)}>-</button>
                 Qty: {lineItem.quantity}

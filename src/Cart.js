@@ -12,15 +12,14 @@ const Cart = ({ updateOrder, removeFromCart, lineItems, cart, products,updateLin
             sum += product.price*lineItem.quantity;
             return (
               <li key={ lineItem.id }>
-                {product.name}
-                <span>
+
+                { product.name }
                 <button onClick={ lineItem.quantity===1 ? ()=> removeFromCart(lineItem) : ()=> decreaseLineItem(lineItem)}>-</button>
                 Qty: {lineItem.quantity}
                 <button onClick={ ()=> updateLineItem(lineItem)}>+</button>
-                </span>
-                <span>
+                ${(product.price * lineItem.quantity)}
+
                 <button onClick={ ()=> removeFromCart(lineItem)}>Remove From Cart</button>
-                </span>
               </li>
             );
           })

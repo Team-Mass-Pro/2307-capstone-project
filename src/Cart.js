@@ -1,6 +1,7 @@
 import React from 'react';
 
-const Cart = ({ updateOrder, removeFromCart, lineItems, cart, products})=> {
+
+const Cart = ({ updateOrder, removeFromCart, lineItems, cart, products,updateLineItem,decreaseLineItem })=> {
 
   if (!lineItems || lineItems.length === 0) {
     return <p>Add some items to your cart</p>;
@@ -15,6 +16,7 @@ const Cart = ({ updateOrder, removeFromCart, lineItems, cart, products})=> {
       return total + itemTotal;
     }, 0);
 
+
   return (
     <div>
       <h2>Cart</h2>
@@ -24,20 +26,26 @@ const Cart = ({ updateOrder, removeFromCart, lineItems, cart, products})=> {
             const product = products.find(product => product.id === lineItem.product_id) || {};
             return (
               <li key={ lineItem.id }>
+
                 { product.name }
-                ({ lineItem.quantity })
+
+                <button onClick={ lineItem.quantity===1 ? ()=> removeFromCart(lineItem) : ()=> decreaseLineItem(lineItem)}>-</button>
+                Qty: {lineItem.quantity}
+                <button onClick={ ()=> updateLineItem(lineItem)}>+</button>
                 ${(product.price * lineItem.quantity)}
+
                 <button onClick={ ()=> removeFromCart(lineItem)}>Remove From Cart</button>
               </li>
             );
           })
         }
+        
         <li>Total Price: ${cartTotal.toFixed(2)}</li>
       </ul>
       {
         lineItems.filter(lineItem => lineItem.order_id === cart.id ).length ? <button onClick={()=> {
           updateOrder({...cart, is_cart: false });
-        }}>Create Order</button>: null
+        }}>Create Order</button>: 'Add some items to your cart pls'
       }
     </div>
   );

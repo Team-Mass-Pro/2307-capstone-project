@@ -41,6 +41,7 @@ const seed = async()=> {
   DROP TABLE IF EXISTS orders;
   DROP TABLE IF EXISTS users;
 
+<<<<<<< HEAD
   CREATE TABLE users(
     id UUID PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
@@ -49,6 +50,14 @@ const seed = async()=> {
     is_admin BOOLEAN DEFAULT false NOT NULL,
     is_vip BOOLEAN NOT NULL
   );
+=======
+    CREATE TABLE products(
+      id UUID PRIMARY KEY,
+      created_at TIMESTAMP DEFAULT now(),
+      name VARCHAR(100) UNIQUE NOT NULL,
+      description TEXT
+    );
+>>>>>>> 7a38177 (added descriptions to all products under product)
 
   CREATE TABLE products(
     id UUID PRIMARY KEY,
@@ -100,6 +109,7 @@ const seed = async()=> {
     createUser({ username: 'ethyl', password: '1234', is_admin: true, is_vip:true})
   ]);
   const [foo, bar, bazz] = await Promise.all([
+<<<<<<< HEAD
     createProduct({ name: 'red', price: 10, description: 'color of passion', is_vip:false, tags:'red primary'}),
     createProduct({ name: 'green', price: 15, description: "nature's color", is_vip:false, tags:'secondary'}),
     createProduct({ name: 'pink', price: 20, description: 'like red but cuter', is_vip:false, tags:'red light'}),
@@ -112,6 +122,12 @@ const seed = async()=> {
     createProduct({ name: 'dodgerBlue', price: 40, description: 'official color of the Los Angeles Dodgers', is_vip:true, tags:'special blue vip'}),
     createProduct({ name: 'aqua', price: 35, description: 'light blue with hints of green', is_vip:true, tags:'special blue light vip'}),
     createProduct({ name: 'gold', price: 50, description: 'yellow for royals', is_vip:true, tags:'special yellow vip'})
+=======
+    createProduct({ name: 'foo', description: 'This is a test of the foo description.'}),
+    createProduct({ name: 'bar', description: 'This is a test of the bar description.'}),
+    createProduct({ name: 'bazz', description: 'This is a test of the bazz description.'}),
+    createProduct({ name: 'quq', description: 'This is a test of the quq description.' }),
+>>>>>>> 7a38177 (added descriptions to all products under product)
   ]);
   
   const [review1, review2, review3] = await Promise.all([

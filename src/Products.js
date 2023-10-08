@@ -84,6 +84,7 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, auth, t
         })}
       </div>
       <ul>
+<<<<<<< HEAD
         {filteredProducts.map((product) => {
           const cartItem = cartItems.find((lineItem) => lineItem.product_id === product.id);
           return (
@@ -103,6 +104,30 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, auth, t
             </li>
           );
         })}
+=======
+        {
+          products.map( product => {
+            const cartItem = cartItems.find(lineItem => lineItem.product_id === product.id);
+            return (
+              <li key={ product.id }>
+                { product.name }
+                {
+                  auth.id ? (
+                    cartItem ? <button onClick={ ()=> updateLineItem(cartItem)}>Add Another</button>: <button onClick={ ()=> createLineItem(product)}>Add</button>
+                  ): null 
+                }
+                {
+                  auth.is_admin ? (
+                    <Link to={`/products/${product.id}/edit`}>Edit</Link>
+                  ): null
+                }
+                <br></br>
+                { product.description }
+              </li>
+            );
+          })
+        }
+>>>>>>> 7a38177 (added descriptions to all products under product)
       </ul>
     </div>
   );

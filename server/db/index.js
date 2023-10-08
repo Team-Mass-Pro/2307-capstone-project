@@ -94,6 +94,7 @@ module.exports = {
   updateOrder,
   authenticate,
   findUserByToken,
+  createUser,
   seed,
   client
 };

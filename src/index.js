@@ -80,6 +80,17 @@ const App = ()=> {
     await api.login({ credentials, setAuth });
   }
 
+  const register = async(user)=> {
+    //console.log(user);
+    try{
+    await api.register(user);
+    window.alert('New User Created');
+    login(user);
+    } catch (ex){
+      window.alert('Username Already Exists');
+    }
+  }
+  
   const logout = ()=> {
     api.logout(setAuth);
   }
@@ -124,7 +135,7 @@ const App = ()=> {
             </>
         ):(
           <div>
-            <Login login={ login }/>
+            <Login login={ login } register={ register }/>
             <Products
               products={ products }
               cartItems = { cartItems }

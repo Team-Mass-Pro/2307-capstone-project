@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 
 const Cart = ({ updateOrder, removeFromCart, lineItems, cart, products,updateLineItem,decreaseLineItem })=> {
+
+  const [address, setAdress] = useState('');
 
   if (!lineItems || lineItems.length === 0) {
     return <p>Add some items to your cart</p>;
@@ -43,9 +45,11 @@ const Cart = ({ updateOrder, removeFromCart, lineItems, cart, products,updateLin
         <li>Total Price: ${cartTotal.toFixed(2)}</li>
       </ul>
       {
-        lineItems.filter(lineItem => lineItem.order_id === cart.id ).length ? <button onClick={()=> {
-          updateOrder({...cart, is_cart: false });
-        }}>Create Order</button>: 'Add some items to your cart pls'
+        lineItems.filter(lineItem => lineItem.order_id === cart.id ).length ? <>
+        <div>Enter your shipping address:<input placeholder='address' value={ address } onChange={ ev => setAdress(ev.target.value)}/></div>
+        <button onClick={()=> {updateOrder({...cart, is_cart: false, address });}}>Create Order</button>
+        </>
+        : 'Add some items to your cart pls'
       }
     </div>
   );

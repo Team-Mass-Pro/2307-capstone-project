@@ -33,6 +33,7 @@ const Orders = ({ orders, products, lineItems })=> {
                   }
                 </ul>
                 <p>Total Price for this Order: ${orderTotal.toFixed(2)}</p>
+                <p>Shipping Destination: {order.address === null || order.address === "" ? "N/A" : order.address}</p>
               </li>
             );
           })

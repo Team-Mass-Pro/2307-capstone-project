@@ -61,7 +61,7 @@ const App = ()=> {
   };
 
   const updateOrder = async(order)=> {
-    await api.updateOrder({ order, setOrders });
+    await api.updateOrder({ order, setOrders});
   };
 
   const removeFromCart = async(lineItem)=> {

@@ -1,7 +1,8 @@
 const {
   authenticate,
   findUserByToken,
-  createUser
+  createUser,
+  fetchUsers
 } = require('../db');
 
 const express = require('express');
@@ -39,4 +40,12 @@ app.post('/users', async(req, res, next)=> {
   }
 });
 
+// app.get('/users', async(req, res, next)=> {
+//   try {
+//     res.send(await fetchUsers(req.user.id));
+//   } 
+//   catch(ex){
+//     next(ex);
+//   }
+// });
 module.exports = app;

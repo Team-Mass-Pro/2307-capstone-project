@@ -8,6 +8,7 @@ const {
 const {
   createUser,
   authenticate,
+  // fetchUsers,
   findUserByToken
 } = require('./auth');
 
@@ -20,9 +21,14 @@ const {
   fetchOrders
 } = require('./cart');
 
+const {
+  createReview,
+  fetchReviews
+} = require('./reviews');
 
 const seed = async()=> {
   const SQL = `
+    DROP TABLE IF EXISTS reviews;
     DROP TABLE IF EXISTS line_items;
     DROP TABLE IF EXISTS products;
     DROP TABLE IF EXISTS orders;
@@ -62,6 +68,14 @@ const seed = async()=> {
       CONSTRAINT product_and_order_key UNIQUE(product_id, order_id)
     );
 
+    CREATE TABLE reviews(
+      id UUID PRIMARY KEY,
+      product_id UUID REFERENCES products(id) NOT NULL,
+      author VARCHAR(50),
+      text VARCHAR(255),
+      rating INTEGER
+    );
+
   `;
   await client.query(SQL);
 
@@ -74,7 +88,12 @@ const seed = async()=> {
     createProduct({ name: 'foo', price: 10, description: 'This is a test of the foo description' }),
     createProduct({ name: 'bar', price: 15, description: 'This is a test of the bar description' }),
     createProduct({ name: 'bazz', price: 20, description: 'This is a test of the bazz description' }),
-    createProduct({ name: 'quq', price: 25, description: 'This is a test of the quq description'}),
+    createProduct({ name: 'quq', price: 25, description: 'This is a test of the quq description'})
+  ]);
+  const [review1, review2, review3] = await Promise.all([
+    createReview({ product_id: foo.id, author: 'lucy', text: 'good', rating: 4}),
+    createReview({ product_id: bar.id, author: 'ethyl', text: 'bad', rating: 1}),
+    createReview({ product_id: bazz.id, author: 'moe', text: 'ok', rating:3})
   ]);
   let orders = await fetchOrders(ethyl.id);
   let cart = orders.find(order => order.is_cart);
@@ -97,6 +116,9 @@ module.exports = {
   authenticate,
   findUserByToken,
   createUser,
+  // fetchUsers,
+  createReview,
+  fetchReviews,
   seed,
   client
 };

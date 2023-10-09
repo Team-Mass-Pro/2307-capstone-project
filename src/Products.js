@@ -23,6 +23,8 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, auth})=
                     <Link to={`/products/${product.id}/edit`}>Edit</Link>
                   ): null
                 }
+                <br></br>
+                { product.description }
               </li>
             );
           })

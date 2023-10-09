@@ -40,7 +40,8 @@ const seed = async()=> {
       id UUID PRIMARY KEY,
       created_at TIMESTAMP DEFAULT now(),
       name VARCHAR(100) UNIQUE NOT NULL,
-      price INTEGER
+      price INTEGER,
+      description TEXT
 
     );
 
@@ -70,10 +71,10 @@ const seed = async()=> {
     createUser({ username: 'ethyl', password: '1234', is_admin: true})
   ]);
   const [foo, bar, bazz] = await Promise.all([
-    createProduct({ name: 'foo', price: 10 }),
-    createProduct({ name: 'bar', price: 15 }),
-    createProduct({ name: 'bazz', price: 20 }),
-    createProduct({ name: 'quq', price: 25 }),
+    createProduct({ name: 'foo', price: 10, description: 'This is a test of the foo description' }),
+    createProduct({ name: 'bar', price: 15, description: 'This is a test of the bar description' }),
+    createProduct({ name: 'bazz', price: 20, description: 'This is a test of the bazz description' }),
+    createProduct({ name: 'quq', price: 25, description: 'This is a test of the quq description'}),
   ]);
   let orders = await fetchOrders(ethyl.id);
   let cart = orders.find(order => order.is_cart);

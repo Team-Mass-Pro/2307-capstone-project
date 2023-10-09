@@ -29,7 +29,7 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, auth })
           return (
             <li key={product.id}>
               <Link to={`/products/${product.id}`}>{product.name} ${product.price}</Link>
-
+              
               {auth.id ? (
                 cartItem ? (
                   <button onClick={() => updateLineItem(cartItem)}>Add Another</button>
@@ -38,6 +38,8 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, auth })
                 )
               ) : null}
               {auth.is_admin ? <Link to={`/products/${product.id}/edit`}>Edit</Link> : null}
+              <br></br>
+              { product.description }
             </li>
           );
         })}

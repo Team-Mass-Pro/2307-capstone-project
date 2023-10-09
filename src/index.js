@@ -56,8 +56,13 @@ const App = ()=> {
     await api.updateLineItem({ lineItem, cart, lineItems, setLineItems });
   };
 
+  const decreaseLineItem = async(lineItem)=> {
+    lineItem.quantity = lineItem.quantity - 2;
+    await api.updateLineItem({ lineItem, cart, lineItems, setLineItems });
+  };
+
   const updateOrder = async(order)=> {
-    await api.updateOrder({ order, setOrders });
+    await api.updateOrder({ order, setOrders});
   };
 
   const removeFromCart = async(lineItem)=> {
@@ -76,6 +81,17 @@ const App = ()=> {
     await api.login({ credentials, setAuth });
   }
 
+  const register = async(user)=> {
+    //console.log(user);
+    try{
+    await api.register(user);
+    window.alert('New User Created');
+    login(user);
+    } catch (ex){
+      window.alert('Username Already Exists');
+    }
+  }
+  
   const logout = ()=> {
     api.logout(setAuth);
   }
@@ -108,6 +124,8 @@ const App = ()=> {
                 products = { products }
                 updateOrder = { updateOrder }
                 removeFromCart = { removeFromCart }
+                updateLineItem = { updateLineItem }
+                decreaseLineItem = { decreaseLineItem }
                 />}/>
                 <Route path ='/orders' element={<Orders
                 orders = { orders }
@@ -121,7 +139,7 @@ const App = ()=> {
             </>
         ):(
           <div>
-            <Login login={ login }/>
+            <Login login={ login } register={ register }/>
             <Products
               products={ products }
               cartItems = { cartItems }

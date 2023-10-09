@@ -72,6 +72,11 @@ const login = async({ credentials, setAuth })=> {
   attemptLoginWithToken(setAuth);
 }
 
+const register = async(user)=> {
+  //console.log(user);
+  const response = await axios.post('/api/users',user);
+}
+
 const logout = (setAuth)=> {
   window.localStorage.removeItem('token');
   setAuth({});
@@ -79,6 +84,7 @@ const logout = (setAuth)=> {
 
 const api = {
   login,
+  register,
   logout,
   fetchProducts,
   fetchOrders,

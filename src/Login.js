@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Login = ({ login }) => {
+const Login = ({ login, register }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -33,6 +33,7 @@ const Login = ({ login }) => {
         onChange={(ev) => setPassword(ev.target.value)}
       />
       <button disabled={!username || !password}>Login</button>
+      <button type='button' onClick={()=>register({username, password, is_admin:false})} disabled={!username || !password}>Register</button>
     </form>
   );
 };

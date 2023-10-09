@@ -48,7 +48,8 @@ const seed = async()=> {
       id UUID PRIMARY KEY,
       created_at TIMESTAMP DEFAULT now(),
       is_cart BOOLEAN NOT NULL DEFAULT true,
-      user_id UUID REFERENCES users(id) NOT NULL
+      user_id UUID REFERENCES users(id) NOT NULL,
+      address VARCHAR(255)
     );
 
     CREATE TABLE line_items(
@@ -94,6 +95,7 @@ module.exports = {
   updateOrder,
   authenticate,
   findUserByToken,
+  createUser,
   seed,
   client
 };

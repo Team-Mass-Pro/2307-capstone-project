@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import { Link, HashRouter, Routes, Route } from 'react-router-dom';
 import Products from './Products';
+import Product from './Product';
 import Orders from './Orders';
 import Cart from './Cart';
 import Login from './Login';
@@ -109,15 +110,15 @@ const App = ()=> {
                 <button onClick={ logout }>Logout</button>
               </span>
             </nav>
-            <main>
-              <Products
+              <Routes>
+                <Route path ='/products' element={<Products
                 auth = { auth }
                 products={ products }
                 cartItems = { cartItems }
                 createLineItem = { createLineItem }
                 updateLineItem = { updateLineItem }
-              />
-              <Cart
+                />}/>
+                <Route path = '/cart' element={<Cart
                 cart = { cart }
                 lineItems = { lineItems }
                 products = { products }
@@ -125,13 +126,16 @@ const App = ()=> {
                 removeFromCart = { removeFromCart }
                 updateLineItem = { updateLineItem }
                 decreaseLineItem = { decreaseLineItem }
-              />
-              <Orders
+                />}/>
+                <Route path ='/orders' element={<Orders
                 orders = { orders }
                 products = { products }
                 lineItems = { lineItems }
-              />
-            </main>
+               />}/>
+                <Route path ='/products/:id' element={<Product 
+                products={ products}
+                />}/>
+              </Routes>
             </>
         ):(
           <div>

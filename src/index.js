@@ -94,30 +94,6 @@ const App = ()=> {
                 <button onClick={ logout }>Logout</button>
               </span>
             </nav>
-            <main>
-              <Products
-                auth = { auth }
-                products={ products }
-                cartItems = { cartItems }
-                createLineItem = { createLineItem }
-                updateLineItem = { updateLineItem }
-              />
-              <Cart
-                cart = { cart }
-                lineItems = { lineItems }
-                products = { products }
-                updateOrder = { updateOrder }
-                removeFromCart = { removeFromCart }
-              />
-              <Orders
-                orders = { orders }
-                products = { products }
-                lineItems = { lineItems }
-              />
-              <Product 
-                products={ products }
-              />
-            </main>
               <Routes>
                 <Route path ='/products' element={<Products
                 auth = { auth }

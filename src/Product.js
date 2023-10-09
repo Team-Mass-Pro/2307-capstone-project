@@ -15,7 +15,8 @@ const Product = ({products}) => {
     }
     return(
         <div>
-            <h1>{product.name}</h1>
+            <h1>{ product.name }</h1>
+            <h3>Price: ${ product.price }</h3>
 
         </div>
     )

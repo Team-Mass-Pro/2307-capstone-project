@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import { Link, HashRouter, Routes, Route } from 'react-router-dom';
 import Products from './Products';
+import Product from './Product';
 import Orders from './Orders';
 import Cart from './Cart';
 import Login from './Login';
@@ -113,7 +114,34 @@ const App = ()=> {
                 products = { products }
                 lineItems = { lineItems }
               />
+              <Product 
+                products={ products }
+              />
             </main>
+              <Routes>
+                <Route path ='/products' element={<Products
+                auth = { auth }
+                products={ products }
+                cartItems = { cartItems }
+                createLineItem = { createLineItem }
+                updateLineItem = { updateLineItem }
+                />}/>
+                <Route path = '/cart' element={<Cart
+                cart = { cart }
+                lineItems = { lineItems }
+                products = { products }
+                updateOrder = { updateOrder }
+                removeFromCart = { removeFromCart }
+                />}/>
+                <Route path ='/orders' element={<Orders
+                orders = { orders }
+                products = { products }
+                lineItems = { lineItems }
+               />}/>
+                <Route path ='/products/:id' element={<Product 
+                products={ products}
+                />}/>
+              </Routes>
             </>
         ):(
           <div>

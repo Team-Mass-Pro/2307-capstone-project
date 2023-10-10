@@ -28,6 +28,11 @@ const fetchReviews = async(setReviews)=> {
   setReviews(response.data);
 };
 
+const fetchTags = async(setTags)=> {
+  const response = await axios.get('/api/tags', getHeaders());
+  setTags(response.data);
+};
+
 const createReview = async(review,reviews,setReviews)=> {
   console.log(review);
   const response = await axios.post('/api/reviews', review, getHeaders());
@@ -106,6 +111,7 @@ const api = {
   fetchOrders,
   fetchLineItems,
   //fetchUsers,
+  fetchTags,
   createLineItem,
   updateLineItem,
   updateOrder,

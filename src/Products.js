@@ -1,10 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-const Products = ({ products, cartItems, createLineItem, updateLineItem, auth }) => {
+const Products = ({ products, cartItems, createLineItem, updateLineItem, auth, tags }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [bookmarkedSearchTerm, setBookmarkedSearchTerm] = useState('');
+  const [activeTags, setActiveTags] = useState({});
 
+  
+  const actTags = {};
+  tags.forEach((t)=> {
+      actTags[t.name] = false;
+      if(activeTags[t.name]=== true){
+        actTags[t.name] = activeTags[t.name];
+      }
+  });
+  
+  //setActiveTags();
   // Function to handle searching and filtering products
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -13,6 +24,16 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, auth })
   if(!auth.is_vip){
     filteredProducts = products.filter((p) => !p.is_vip);
   }
+
+  for (const isActive in activeTags) {
+    if(activeTags[isActive]){
+      filteredProducts = filteredProducts.filter((p) => p.tags.toLowerCase().includes(isActive.toLowerCase()));
+    }
+  }
+  // activeTags.forEach((at)=>{
+  //   return
+  // })
+
   filteredProducts = filteredProducts.filter((product) =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -41,6 +62,7 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, auth })
 
   return (
     <div>
+
       <h2>Products</h2>
       <div>
         <input
@@ -51,6 +73,15 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, auth })
         />
         <button onClick={handleBookmark}>Bookmark Search</button>
         <button onClick={handleRestoreBookmark}>Restore Bookmark</button>
+      </div>
+      <div>
+        Filter by Tag
+        {tags.map((t)=>{
+          return(
+            <button className={'clicked'+activeTags[t.name]} key={t.id} onClick={()=>{actTags[t.name] = !actTags[t.name];setActiveTags(actTags)}}>{t.name}</button>
+            
+          )
+        })}
       </div>
       <ul>
         {filteredProducts.map((product) => {

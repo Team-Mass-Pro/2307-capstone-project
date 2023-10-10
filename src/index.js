@@ -15,6 +15,7 @@ const App = ()=> {
   const [reviews, setReviews] = useState([]);
   //const [users, setUsers] = useState([]);
   const [auth, setAuth] = useState({});
+  const [tags, setTags] = useState([]);
   const navigate = useNavigate();
 
   const attemptLoginWithToken = async()=> {
@@ -58,7 +59,16 @@ const App = ()=> {
       fetchData();
     }
   }, [auth]);
-  
+
+  useEffect(()=> {
+    if(auth.id){
+      const fetchData = async()=> {
+        await api.fetchTags(setTags);
+        console.log(tags);
+      };
+      fetchData();
+    }
+  }, [auth]);
   // useEffect(()=> {
   //   if(auth.id){
   //     const fetchData = async()=> {
@@ -121,7 +131,6 @@ const App = ()=> {
     api.logout(setAuth);
     navigate(`/`);
   }
-
   return (
     <div>
       {
@@ -133,7 +142,7 @@ const App = ()=> {
               <Link to='/cart'>Cart ({ cartCount })</Link>
               <Link to='/orders'>Orders ({ orders.filter(order => !order.is_cart).length })</Link>
               <span>
-                Welcome { auth.username }! {auth.is_vip ? "You are a VIP Member": ""}{console.log(auth)}
+                Welcome { auth.username }! {auth.is_vip ? "You are a VIP Member": ""}
                 <button onClick={ logout }>Logout</button>
               </span>
             </nav>
@@ -149,6 +158,7 @@ const App = ()=> {
                 cartItems = { cartItems }
                 createLineItem = { createLineItem }
                 updateLineItem = { updateLineItem }
+                tags = { tags }
               />
               <Cart
                 cart = { cart }
@@ -174,6 +184,7 @@ const App = ()=> {
                 cartItems = { cartItems }
                 createLineItem = { createLineItem }
                 updateLineItem = { updateLineItem }
+                tags = { tags }
               />}
             />
             <Route path='/cart' element={ 
@@ -216,6 +227,7 @@ const App = ()=> {
               createLineItem = { createLineItem }
               updateLineItem = { updateLineItem }
               auth = { auth }
+              tags = { tags }
             />
           </div>
         )

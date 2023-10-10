@@ -39,7 +39,8 @@ const seed = async()=> {
       created_at TIMESTAMP DEFAULT now(),
       username VARCHAR(100) UNIQUE NOT NULL,
       password VARCHAR(100) NOT NULL,
-      is_admin BOOLEAN DEFAULT false NOT NULL
+      is_admin BOOLEAN DEFAULT false NOT NULL,
+      is_vip BOOLEAN NOT NULL
     );
 
     CREATE TABLE products(
@@ -47,9 +48,10 @@ const seed = async()=> {
       created_at TIMESTAMP DEFAULT now(),
       name VARCHAR(100) UNIQUE NOT NULL,
       price INTEGER,
-      description TEXT
-
+      description TEXT,
+      is_vip BOOLEAN NOT NULL
     );
+
 
     CREATE TABLE orders(
       id UUID PRIMARY KEY,
@@ -80,21 +82,24 @@ const seed = async()=> {
   await client.query(SQL);
 
   const [moe, lucy, ethyl] = await Promise.all([
-    createUser({ username: 'moe', password: 'm_password', is_admin: false}),
-    createUser({ username: 'lucy', password: 'l_password', is_admin: false}),
-    createUser({ username: 'ethyl', password: '1234', is_admin: true})
+    createUser({ username: 'moe', password: 'm_password', is_admin: false, is_vip:false}),
+    createUser({ username: 'lucy', password: 'l_password', is_admin: false, is_vip:false}),
+    createUser({ username: 'ethyl', password: '1234', is_admin: true, is_vip:true})
   ]);
   const [foo, bar, bazz] = await Promise.all([
-    createProduct({ name: 'foo', price: 10, description: 'This is a test of the foo description' }),
-    createProduct({ name: 'bar', price: 15, description: 'This is a test of the bar description' }),
-    createProduct({ name: 'bazz', price: 20, description: 'This is a test of the bazz description' }),
-    createProduct({ name: 'quq', price: 25, description: 'This is a test of the quq description'})
+    createProduct({ name: 'foo', price: 10, description: 'This is a test of the foo description', is_vip:false}),
+    createProduct({ name: 'bar', price: 15, description: 'This is a test of the bar description', is_vip:false}),
+    createProduct({ name: 'bazz', price: 20, description: 'This is a test of the bazz description', is_vip:false}),
+    createProduct({ name: 'quq', price: 25, description: 'This is a test of the quq description', is_vip:false}),
+    createProduct({ name: 'dodgerBlue', price: 40, description: 'official color of the Los Angeles Dodgers', is_vip:true}),
+    createProduct({ name: 'aqua', price: 35, description: 'light blue with hints of green', is_vip:true}),
   ]);
   const [review1, review2, review3] = await Promise.all([
     createReview({ product_id: foo.id, author: 'lucy', text: 'good', rating: 4}),
     createReview({ product_id: bar.id, author: 'ethyl', text: 'bad', rating: 1}),
     createReview({ product_id: bazz.id, author: 'moe', text: 'ok', rating:3})
   ]);
+
   let orders = await fetchOrders(ethyl.id);
   let cart = orders.find(order => order.is_cart);
   let lineItem = await createLineItem({ order_id: cart.id, product_id: foo.id});

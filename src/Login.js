@@ -33,7 +33,7 @@ const Login = ({ login, register }) => {
         onChange={(ev) => setPassword(ev.target.value)}
       />
       <button disabled={!username || !password}>Login</button>
-      <button type='button' onClick={()=>register({username, password, is_admin:false})} disabled={!username || !password}>Register</button>
+      <button type='button' onClick={()=>register({username, password, is_admin:false, is_vip:false})} disabled={!username || !password}>Register</button>
     </form>
   );
 };

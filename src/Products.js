@@ -7,8 +7,11 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, auth })
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
-
-  const filteredProducts = products.filter((product) =>
+  let filteredProducts = products;
+  if(!auth.is_vip){
+    filteredProducts = products.filter((p) => !p.is_vip);
+  }
+  filteredProducts = filteredProducts.filter((product) =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -29,6 +32,7 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, auth })
           const cartItem = cartItems.find((lineItem) => lineItem.product_id === product.id);
           return (
             <li key={product.id}>
+              {product.is_vip ? <span className = "vip">VIP </span>:''}
               <Link to={`/products/${product.id}`}>{product.name}</Link> ${product.price}
               
               {auth.id ? (

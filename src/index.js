@@ -133,7 +133,7 @@ const App = ()=> {
               <Link to='/cart'>Cart ({ cartCount })</Link>
               <Link to='/orders'>Orders ({ orders.filter(order => !order.is_cart).length })</Link>
               <span>
-                Welcome { auth.username }!
+                Welcome { auth.username }! {auth.is_vip ? "You are a VIP Member": ""}{console.log(auth)}
                 <button onClick={ logout }>Logout</button>
               </span>
             </nav>

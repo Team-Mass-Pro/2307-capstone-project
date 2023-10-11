@@ -6,27 +6,27 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, auth, t
   const [bookmarkedSearchTerm, setBookmarkedSearchTerm] = useState('');
   const [activeTags, setActiveTags] = useState({});
 
-  
+
   const actTags = {};
-  tags.forEach((t)=> {
-      actTags[t.name] = false;
-      if(activeTags[t.name]=== true){
-        actTags[t.name] = activeTags[t.name];
-      }
+  tags.forEach((t) => {
+    actTags[t.name] = false;
+    if (activeTags[t.name] === true) {
+      actTags[t.name] = activeTags[t.name];
+    }
   });
-  
+
   //setActiveTags();
   // Function to handle searching and filtering products
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
   let filteredProducts = products;
-  if(!auth.is_vip){
+  if (!auth.is_vip) {
     filteredProducts = products.filter((p) => !p.is_vip);
   }
 
   for (const isActive in activeTags) {
-    if(activeTags[isActive]){
+    if (activeTags[isActive]) {
       filteredProducts = filteredProducts.filter((p) => p.tags.toLowerCase().includes(isActive.toLowerCase()));
     }
   }
@@ -76,20 +76,19 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, auth, t
       </div>
       <div>
         Filter by Tag
-        {tags.map((t)=>{
-          return(
-            <button className={'clicked'+activeTags[t.name]} key={t.id} onClick={()=>{actTags[t.name] = !actTags[t.name];setActiveTags(actTags)}}>{t.name}</button>
-            
+        {tags.map((t) => {
+          return (
+            <button className={'clicked' + activeTags[t.name]} key={t.id} onClick={() => { actTags[t.name] = !actTags[t.name]; setActiveTags(actTags) }}>{t.name}</button>
+
           )
         })}
       </div>
       <ul>
-<<<<<<< HEAD
         {filteredProducts.map((product) => {
           const cartItem = cartItems.find((lineItem) => lineItem.product_id === product.id);
           return (
             <li key={product.id}>
-              {product.is_vip ? <span className = "vip">VIP </span>:''}
+              {product.is_vip ? <span className="vip">VIP </span> : ''}
               <Link to={`/products/${product.id}`}>{product.name}</Link> ${product.price}
               {auth.id ? (
                 cartItem ? (
@@ -104,30 +103,6 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, auth, t
             </li>
           );
         })}
-=======
-        {
-          products.map( product => {
-            const cartItem = cartItems.find(lineItem => lineItem.product_id === product.id);
-            return (
-              <li key={ product.id }>
-                { product.name }
-                {
-                  auth.id ? (
-                    cartItem ? <button onClick={ ()=> updateLineItem(cartItem)}>Add Another</button>: <button onClick={ ()=> createLineItem(product)}>Add</button>
-                  ): null 
-                }
-                {
-                  auth.is_admin ? (
-                    <Link to={`/products/${product.id}/edit`}>Edit</Link>
-                  ): null
-                }
-                <br></br>
-                { product.description }
-              </li>
-            );
-          })
-        }
->>>>>>> 7a38177 (added descriptions to all products under product)
       </ul>
     </div>
   );

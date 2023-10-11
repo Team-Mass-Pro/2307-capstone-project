@@ -31,7 +31,7 @@ const {
   createTag
 } = require('./tags');
 
-const seed = async()=> {
+const seed = async () => {
   const SQL = `
 
   DROP TABLE IF EXISTS reviews;
@@ -41,7 +41,6 @@ const seed = async()=> {
   DROP TABLE IF EXISTS orders;
   DROP TABLE IF EXISTS users;
 
-<<<<<<< HEAD
   CREATE TABLE users(
     id UUID PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
@@ -50,14 +49,6 @@ const seed = async()=> {
     is_admin BOOLEAN DEFAULT false NOT NULL,
     is_vip BOOLEAN NOT NULL
   );
-=======
-    CREATE TABLE products(
-      id UUID PRIMARY KEY,
-      created_at TIMESTAMP DEFAULT now(),
-      name VARCHAR(100) UNIQUE NOT NULL,
-      description TEXT
-    );
->>>>>>> 7a38177 (added descriptions to all products under product)
 
   CREATE TABLE products(
     id UUID PRIMARY KEY,
@@ -104,57 +95,50 @@ const seed = async()=> {
   await client.query(SQL);
 
   const [moe, lucy, ethyl] = await Promise.all([
-    createUser({ username: 'moe', password: 'm_password', is_admin: false, is_vip:false}),
-    createUser({ username: 'lucy', password: 'l_password', is_admin: false, is_vip:false}),
-    createUser({ username: 'ethyl', password: '1234', is_admin: true, is_vip:true})
+    createUser({ username: 'moe', password: 'm_password', is_admin: false, is_vip: false }),
+    createUser({ username: 'lucy', password: 'l_password', is_admin: false, is_vip: false }),
+    createUser({ username: 'ethyl', password: '1234', is_admin: true, is_vip: true })
   ]);
   const [foo, bar, bazz] = await Promise.all([
-<<<<<<< HEAD
-    createProduct({ name: 'red', price: 10, description: 'color of passion', is_vip:false, tags:'red primary'}),
-    createProduct({ name: 'green', price: 15, description: "nature's color", is_vip:false, tags:'secondary'}),
-    createProduct({ name: 'pink', price: 20, description: 'like red but cuter', is_vip:false, tags:'red light'}),
-    createProduct({ name: 'blue', price: 25, description: 'calming color', is_vip:false, tags:'blue primary'}),
-    createProduct({ name: 'black', price: 5, description: 'absense of light', is_vip:false, tags:'monochrome dark'}),
-    createProduct({ name: 'yellow', price: 15, description: 'fills you with joy', is_vip:false, tags:'yellow primary'}),
-    createProduct({ name: 'orange', price: 20, description: "the color of oranges", is_vip:false, tags:'secondary'}),
-    createProduct({ name: 'white', price: 5, description: 'white', is_vip:false, tags:'monochrome light'}),
-    createProduct({ name: 'purple', price: 30, description: "Very valuable in olden times", is_vip:true, tags:'secondary vip'}),
-    createProduct({ name: 'dodgerBlue', price: 40, description: 'official color of the Los Angeles Dodgers', is_vip:true, tags:'special blue vip'}),
-    createProduct({ name: 'aqua', price: 35, description: 'light blue with hints of green', is_vip:true, tags:'special blue light vip'}),
-    createProduct({ name: 'gold', price: 50, description: 'yellow for royals', is_vip:true, tags:'special yellow vip'})
-=======
-    createProduct({ name: 'foo', description: 'This is a test of the foo description.'}),
-    createProduct({ name: 'bar', description: 'This is a test of the bar description.'}),
-    createProduct({ name: 'bazz', description: 'This is a test of the bazz description.'}),
-    createProduct({ name: 'quq', description: 'This is a test of the quq description.' }),
->>>>>>> 7a38177 (added descriptions to all products under product)
+    createProduct({ name: 'red', price: 10, description: 'color of passion', is_vip: false, tags: 'red primary' }),
+    createProduct({ name: 'green', price: 15, description: "nature's color", is_vip: false, tags: 'secondary' }),
+    createProduct({ name: 'pink', price: 20, description: 'like red but cuter', is_vip: false, tags: 'red light' }),
+    createProduct({ name: 'blue', price: 25, description: 'calming color', is_vip: false, tags: 'blue primary' }),
+    createProduct({ name: 'black', price: 5, description: 'absense of light', is_vip: false, tags: 'monochrome dark' }),
+    createProduct({ name: 'yellow', price: 15, description: 'fills you with joy', is_vip: false, tags: 'yellow primary' }),
+    createProduct({ name: 'orange', price: 20, description: "the color of oranges", is_vip: false, tags: 'secondary' }),
+    createProduct({ name: 'white', price: 5, description: 'white', is_vip: false, tags: 'monochrome light' }),
+    createProduct({ name: 'purple', price: 30, description: "Very valuable in olden times", is_vip: true, tags: 'secondary vip' }),
+    createProduct({ name: 'dodgerBlue', price: 40, description: 'official color of the Los Angeles Dodgers', is_vip: true, tags: 'special blue vip' }),
+    createProduct({ name: 'aqua', price: 35, description: 'light blue with hints of green', is_vip: true, tags: 'special blue light vip' }),
+    createProduct({ name: 'gold', price: 50, description: 'yellow for royals', is_vip: true, tags: 'special yellow vip' })
   ]);
-  
+
   const [review1, review2, review3] = await Promise.all([
-    createReview({ product_id: foo.id, author: 'lucy', text: 'good', rating: 4}),
-    createReview({ product_id: bar.id, author: 'ethyl', text: 'bad', rating: 1}),
-    createReview({ product_id: bazz.id, author: 'moe', text: 'ok', rating:3})
+    createReview({ product_id: foo.id, author: 'lucy', text: 'good', rating: 4 }),
+    createReview({ product_id: bar.id, author: 'ethyl', text: 'bad', rating: 1 }),
+    createReview({ product_id: bazz.id, author: 'moe', text: 'ok', rating: 3 })
   ]);
 
   const tags = await Promise.all([
-    createTag({name: 'blue'}),
-    createTag({name: 'dark'}),
-    createTag({name: 'light'}),
-    createTag({name: 'monochrome'}),
-    createTag({name: 'red'}),
-    createTag({name: 'yellow'}),
-    createTag({name: 'primary'}),
-    createTag({name: 'secondary'}),
-    createTag({name: 'special'}),
-    createTag({name: 'vip'})
+    createTag({ name: 'blue' }),
+    createTag({ name: 'dark' }),
+    createTag({ name: 'light' }),
+    createTag({ name: 'monochrome' }),
+    createTag({ name: 'red' }),
+    createTag({ name: 'yellow' }),
+    createTag({ name: 'primary' }),
+    createTag({ name: 'secondary' }),
+    createTag({ name: 'special' }),
+    createTag({ name: 'vip' })
   ]);
 
   let orders = await fetchOrders(ethyl.id);
   let cart = orders.find(order => order.is_cart);
-  let lineItem = await createLineItem({ order_id: cart.id, product_id: foo.id});
+  let lineItem = await createLineItem({ order_id: cart.id, product_id: foo.id });
   lineItem.quantity++;
   await updateLineItem(lineItem);
-  lineItem = await createLineItem({ order_id: cart.id, product_id: bar.id});
+  lineItem = await createLineItem({ order_id: cart.id, product_id: bar.id });
   cart.is_cart = false;
   await updateOrder(cart);
 };

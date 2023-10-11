@@ -96,32 +96,7 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, auth, w
         })}
       </div>
       <ul>
-        {
-          products.map( product => {
-            const cartItem = cartItems.find(lineItem => lineItem.product_id === product.id);
-            return (
-              <li key={ product.id }>
-                { <Link to={`/products/${product.id}`}> { product.name } </Link> }${product.price}
-
-                {
-                  auth.id ? (
-                    cartItem ? <button onClick={ ()=> updateLineItem(cartItem)}>Add Another</button>: <button onClick={ ()=> createLineItem(product)}>Add</button>
-                  ): null 
-                }
-                {
-                  auth.is_admin ? (
-                    <Link to={`/products/${product.id}/edit`}>Edit</Link>
-                  ): null
-                }
-                {
-                  auth.id ? <Wishlist product={ product } wishlist = { wishlists.find(wishlist => wishlist.product_id === product.id) }
-                  createWishlist = { createWishlist } deleteWishlist = { deleteWishlist }
-                  />: null
-                }
-              </li>
-            );
-          })
-        }
+        
         {filteredProducts.map((product) => {
           const cartItem = cartItems.find((lineItem) => lineItem.product_id === product.id);
           return (
@@ -136,13 +111,12 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, auth, w
                 )
               ) : null}
               {auth.is_admin ? <Link to={`/products/${product.id}/edit`}>Edit</Link> : null}
+              <div>{product.description}</div>
               {
                 auth.id ? <Wishlist product={ product } wishlist = { wishlists.find(wishlist => wishlist.product_id === product.id) }
                 createWishlist = { createWishlist } deleteWishlist = { deleteWishlist }
                 />: null
               }
-              <br></br>
-              {product.description}
             </li>
           );
         })}
@@ -152,3 +126,11 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, auth, w
 };
 
 export default Products;
+
+/*
+{
+auth.id ? <Wishlist product={ product } wishlist = { wishlists.find(wishlist => wishlist.product_id === product.id) }
+createWishlist = { createWishlist } deleteWishlist = { deleteWishlist }
+/>: null
+}
+                */

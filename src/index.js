@@ -187,10 +187,8 @@ const App = ()=> {
                 wishlists = { wishlists }
                 createWishlist = { createWishlist }
                 deleteWishlist = { deleteWishlist }
-                />}/>
-                <Route path = '/cart' element={<Cart
                 tags = { tags }
-              />
+                />
               <Cart
                 cart = { cart }
                 lineItems = { lineItems }
@@ -215,6 +213,9 @@ const App = ()=> {
                 cartItems = { cartItems }
                 createLineItem = { createLineItem }
                 updateLineItem = { updateLineItem }
+                wishlists = { wishlists }
+                createWishlist = { createWishlist }
+                deleteWishlist = { deleteWishlist }
                 tags = { tags }
               />}
             />

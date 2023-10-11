@@ -8,9 +8,9 @@ const Users = ({ users, updateUser,auth, setAuth }) => {
       <ul>
         {users.map( u => {
         return(
-          <li key={ u.id }>
+          <li key={ u.id } id='uList'>
             <div>
-              {u.username}<span> id: {u.id}</span>
+            { u.avatar ? <img src={ u.avatar } /> : null } {u.username}<span> id: {u.id}</span>
             </div>
             <div>
               Administrator Access: {`${u.is_admin}`}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
-import { Link, HashRouter, Routes, Route } from 'react-router-dom';
+import { Link, HashRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import Products from './Products';
 import Product from './Product';
 import Orders from './Orders';
@@ -12,8 +12,12 @@ const App = ()=> {
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
   const [lineItems, setLineItems] = useState([]);
+  const [reviews, setReviews] = useState([]);
+  //const [users, setUsers] = useState([]);
   const [auth, setAuth] = useState({});
   const [wishlists, setWishlists] = useState([]);
+  const [tags, setTags] = useState([]);
+  const navigate = useNavigate();
 
   const attemptLoginWithToken = async()=> {
     await api.attemptLoginWithToken(setAuth);
@@ -56,6 +60,15 @@ const App = ()=> {
       fetchData();
     }
   }, [auth]);
+  
+  useEffect(()=> {
+    if(auth.id){
+      const fetchData = async()=> {
+        await api.fetchReviews(setReviews);
+      };
+      fetchData();
+    }
+  }, [auth]);
 
   const createWishlist = async(wishlist)=> {
     await api.createWishlist(wishlist,wishlists,setWishlists);
@@ -64,6 +77,25 @@ const App = ()=> {
   const deleteWishlist = async(wishlist)=> {
     await api.deleteWishlist({ wishlist, wishlists, setWishlists });
   };
+
+  useEffect(()=> {
+    if(auth.id){
+      const fetchData = async()=> {
+        await api.fetchTags(setTags);
+        console.log(tags);
+      };
+      fetchData();
+    }
+  }, [auth]);
+  // useEffect(()=> {
+  //   if(auth.id){
+  //     const fetchData = async()=> {
+  //       await api.fetchUsers(setUsers);
+  //     };
+  //     fetchData();
+  //   }
+  // }, [auth]);
+
 
   const createLineItem = async(product)=> {
     await api.createLineItem({ product, cart, lineItems, setLineItems});
@@ -94,6 +126,11 @@ const App = ()=> {
     return acc += item.quantity;
   }, 0);
 
+  const createReview = async(review)=> {
+    await api.createReview(review,reviews,setReviews);
+    
+  }
+
   const login = async(credentials)=> {
     await api.login({ credentials, setAuth });
   }
@@ -111,24 +148,30 @@ const App = ()=> {
   
   const logout = ()=> {
     api.logout(setAuth);
+    navigate(`/`);
   }
-
   return (
     <div>
       {
         auth.id ? (
           <>
             <nav>
+              <Link to='/'>Home</Link>
               <Link to='/products'>Products ({ products.length })</Link>
-              <Link to='/orders'>Orders ({ orders.filter(order => !order.is_cart).length })</Link>
               <Link to='/cart'>Cart ({ cartCount })</Link>
+              <Link to='/orders'>Orders ({ orders.filter(order => !order.is_cart).length })</Link>
               <span>
-                Welcome { auth.username }!
+                Welcome { auth.username }! {auth.is_vip ? "You are a VIP Member": ""}
                 <button onClick={ logout }>Logout</button>
               </span>
             </nav>
-              <Routes>
-                <Route path ='/products' element={<Products
+            <main>
+            <Routes>
+
+              {/* This route shows multiple categories. Remember to edit the specific route too when editing this*/}
+            <Route path='/' element={ 
+            <>
+              <Products
                 auth = { auth }
                 products={ products }
                 cartItems = { cartItems }
@@ -139,6 +182,9 @@ const App = ()=> {
                 deleteWishlist = { deleteWishlist }
                 />}/>
                 <Route path = '/cart' element={<Cart
+                tags = { tags }
+              />
+              <Cart
                 cart = { cart }
                 lineItems = { lineItems }
                 products = { products }
@@ -146,16 +192,55 @@ const App = ()=> {
                 removeFromCart = { removeFromCart }
                 updateLineItem = { updateLineItem }
                 decreaseLineItem = { decreaseLineItem }
-                />}/>
-                <Route path ='/orders' element={<Orders
+              />
+              <Orders
                 orders = { orders }
                 products = { products }
                 lineItems = { lineItems }
-               />}/>
-                <Route path ='/products/:id' element={<Product 
-                products={ products}
-                />}/>
-              </Routes>
+              />
+            </>
+            }
+            />
+            <Route path='/products' element={ 
+              <Products
+                auth = { auth }
+                products={ products }
+                cartItems = { cartItems }
+                createLineItem = { createLineItem }
+                updateLineItem = { updateLineItem }
+                tags = { tags }
+              />}
+            />
+            <Route path='/cart' element={ 
+              <Cart
+                cart = { cart }
+                lineItems = { lineItems }
+                products = { products }
+                updateOrder = { updateOrder }
+                removeFromCart = { removeFromCart }
+                updateLineItem = { updateLineItem }
+                decreaseLineItem = { decreaseLineItem }
+              />}
+            />
+            <Route path='/orders' element={ 
+              <Orders
+                orders = { orders }
+                products = { products }
+                lineItems = { lineItems }
+              />}
+            />
+            <Route path='/products/:id' element={ 
+              <Product
+                products = { products }
+                reviews = { reviews }
+                auth = {auth}
+                createReview = {createReview}
+              />}
+        
+        />
+            </Routes>
+            
+            </main>
             </>
         ):(
           <div>
@@ -169,6 +254,7 @@ const App = ()=> {
               wishlists = { wishlists }
               createWishlist = { createWishlist }
               deleteWishlist = { deleteWishlist }
+              tags = { tags }
             />
           </div>
         )

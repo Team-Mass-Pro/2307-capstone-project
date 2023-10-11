@@ -8,6 +8,7 @@ const {
 const {
   createUser,
   authenticate,
+  // fetchUsers,
   findUserByToken
 } = require('./auth');
 
@@ -68,6 +69,76 @@ const seed = async()=> {
       CONSTRAINT product_and_order_key UNIQUE(product_id, order_id)
     );
 
+const {
+  createReview,
+  fetchReviews
+} = require('./reviews');
+
+const {
+  fetchTags,
+  createTag
+} = require('./tags');
+
+const seed = async()=> {
+  const SQL = `
+
+  DROP TABLE IF EXISTS reviews;
+  DROP TABLE IF EXISTS tags;
+  DROP TABLE IF EXISTS line_items;
+  DROP TABLE IF EXISTS products;
+  DROP TABLE IF EXISTS orders;
+  DROP TABLE IF EXISTS users;
+
+  CREATE TABLE users(
+    id UUID PRIMARY KEY,
+    created_at TIMESTAMP DEFAULT now(),
+    username VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    is_admin BOOLEAN DEFAULT false NOT NULL,
+    is_vip BOOLEAN NOT NULL
+  );
+
+  CREATE TABLE products(
+    id UUID PRIMARY KEY,
+    created_at TIMESTAMP DEFAULT now(),
+    name VARCHAR(100) UNIQUE NOT NULL,
+    price INTEGER,
+    description TEXT,
+    is_vip BOOLEAN NOT NULL,
+    tags TEXT
+  );
+
+
+  CREATE TABLE orders(
+    id UUID PRIMARY KEY,
+    created_at TIMESTAMP DEFAULT now(),
+    is_cart BOOLEAN NOT NULL DEFAULT true,
+    user_id UUID REFERENCES users(id) NOT NULL,
+    address VARCHAR(255)
+  );
+
+  CREATE TABLE line_items(
+    id UUID PRIMARY KEY,
+    created_at TIMESTAMP DEFAULT now(),
+    product_id UUID REFERENCES products(id) NOT NULL,
+    order_id UUID REFERENCES orders(id) NOT NULL,
+    quantity INTEGER DEFAULT 1,
+    CONSTRAINT product_and_order_key UNIQUE(product_id, order_id)
+  );
+
+  CREATE TABLE reviews(
+    id UUID PRIMARY KEY,
+    product_id UUID REFERENCES products(id) NOT NULL,
+    author VARCHAR(50),
+    text VARCHAR(255),
+    rating INTEGER
+  );
+
+  CREATE TABLE tags(
+    id UUID PRIMARY KEY,
+    name VARCHAR(50)
+  );
+
     CREATE TABLE wishlists(
       id UUID PRIMARY KEY,
       user_id UUID REFERENCES users(id) NOT NULL,
@@ -79,21 +150,43 @@ const seed = async()=> {
   await client.query(SQL);
 
   const [moe, lucy, ethyl] = await Promise.all([
-    createUser({ username: 'moe', password: 'm_password', is_admin: false}),
-    createUser({ username: 'lucy', password: 'l_password', is_admin: false}),
-    createUser({ username: 'ethyl', password: '1234', is_admin: true})
+    createUser({ username: 'moe', password: 'm_password', is_admin: false, is_vip:false}),
+    createUser({ username: 'lucy', password: 'l_password', is_admin: false, is_vip:false}),
+    createUser({ username: 'ethyl', password: '1234', is_admin: true, is_vip:true})
   ]);
   const [foo, bar, bazz] = await Promise.all([
-    createProduct({ name: 'foo', price: 10 }),
-    createProduct({ name: 'bar', price: 15 }),
-    createProduct({ name: 'bazz', price: 20 }),
-    createProduct({ name: 'quq', price: 25 }),
-
+    createProduct({ name: 'red', price: 10, description: 'color of passion', is_vip:false, tags:'red primary'}),
+    createProduct({ name: 'green', price: 15, description: "nature's color", is_vip:false, tags:'secondary'}),
+    createProduct({ name: 'pink', price: 20, description: 'like red but cuter', is_vip:false, tags:'red light'}),
+    createProduct({ name: 'blue', price: 25, description: 'calming color', is_vip:false, tags:'blue primary'}),
+    createProduct({ name: 'black', price: 5, description: 'absense of light', is_vip:false, tags:'monochrome dark'}),
+    createProduct({ name: 'yellow', price: 15, description: 'fills you with joy', is_vip:false, tags:'yellow primary'}),
+    createProduct({ name: 'orange', price: 20, description: "the color of oranges", is_vip:false, tags:'secondary'}),
+    createProduct({ name: 'white', price: 5, description: 'white', is_vip:false, tags:'monochrome light'}),
+    createProduct({ name: 'purple', price: 30, description: "Very valuable in olden times", is_vip:true, tags:'secondary vip'}),
+    createProduct({ name: 'dodgerBlue', price: 40, description: 'official color of the Los Angeles Dodgers', is_vip:true, tags:'special blue vip'}),
+    createProduct({ name: 'aqua', price: 35, description: 'light blue with hints of green', is_vip:true, tags:'special blue light vip'}),
+    createProduct({ name: 'gold', price: 50, description: 'yellow for royals', is_vip:true, tags:'special yellow vip'})
   ]);
   
-  await Promise.all([
-    createWishlist({ user_id: ethyl.id, product_id: foo.id })
-  ])
+  const [review1, review2, review3] = await Promise.all([
+    createReview({ product_id: foo.id, author: 'lucy', text: 'good', rating: 4}),
+    createReview({ product_id: bar.id, author: 'ethyl', text: 'bad', rating: 1}),
+    createReview({ product_id: bazz.id, author: 'moe', text: 'ok', rating:3})
+  ]);
+
+  const tags = await Promise.all([
+    createTag({name: 'blue'}),
+    createTag({name: 'dark'}),
+    createTag({name: 'light'}),
+    createTag({name: 'monochrome'}),
+    createTag({name: 'red'}),
+    createTag({name: 'yellow'}),
+    createTag({name: 'primary'}),
+    createTag({name: 'secondary'}),
+    createTag({name: 'special'}),
+    createTag({name: 'vip'})
+  ]);
 
   let orders = await fetchOrders(ethyl.id);
   let cart = orders.find(order => order.is_cart);
@@ -119,6 +212,11 @@ module.exports = {
   authenticate,
   findUserByToken,
   createUser,
+  // fetchUsers,
+  createReview,
+  fetchReviews,
   seed,
+  fetchTags,
+  createTag,
   client
 };

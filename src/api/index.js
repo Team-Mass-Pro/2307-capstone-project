@@ -39,10 +39,14 @@ const createReview = async(review,reviews,setReviews)=> {
   setReviews([...reviews, response.data]);
 }
 
-// const fetchUsers = async(setUsers)=> {
-//   const response = await axios.get('/api/users', getHeaders());
-//   setUsers(response.data);
-// };
+const fetchUsers = async(setUsers)=> {
+  try{
+  const response = await axios.get('/api/users', getHeaders());
+  setUsers(response.data);
+  }catch(ex){
+    setUsers([]);
+  }
+}
 
 const createLineItem = async({ product, cart, lineItems, setLineItems })=> {
   const response = await axios.post('/api/lineItems', {
@@ -64,6 +68,12 @@ const updateOrder = async({ order, setOrders })=> {
   await axios.put(`/api/orders/${order.id}`, order, getHeaders());
   const response = await axios.get('/api/orders', getHeaders());
   setOrders(response.data);
+};
+
+const updateUser = async({ user, setUsers })=> {
+  await axios.put(`/api/users/${user.id}`, user, getHeaders());
+  const response = await axios.get('/api/users', getHeaders());
+  setUsers(response.data);
 };
 
 const removeFromCart = async({ lineItem, lineItems, setLineItems })=> {
@@ -110,11 +120,12 @@ const api = {
   fetchProducts,
   fetchOrders,
   fetchLineItems,
-  //fetchUsers,
+  fetchUsers,
   fetchTags,
   createLineItem,
   updateLineItem,
   updateOrder,
+  updateUser,
   removeFromCart,
   createReview,
   fetchReviews,

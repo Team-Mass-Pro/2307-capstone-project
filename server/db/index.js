@@ -115,6 +115,7 @@ const seed = async()=> {
     createUser({ username: 'ethyl', password: '1234', is_admin: true, is_vip:true})
   ]);
   const [foo, bar, bazz] = await Promise.all([
+
     createProduct({ name: 'red', price: 10, description: 'color of passion', is_vip:false, tags:'red primary'}),
     createProduct({ name: 'green', price: 15, description: "nature's color", is_vip:false, tags:'secondary'}),
     createProduct({ name: 'pink', price: 20, description: 'like red but cuter', is_vip:false, tags:'red light'}),
@@ -127,6 +128,7 @@ const seed = async()=> {
     createProduct({ name: 'dodgerBlue', price: 40, description: 'official color of the Los Angeles Dodgers', is_vip:true, tags:'special blue vip'}),
     createProduct({ name: 'aqua', price: 35, description: 'light blue with hints of green', is_vip:true, tags:'special blue light vip'}),
     createProduct({ name: 'gold', price: 50, description: 'yellow for royals', is_vip:true, tags:'special yellow vip'})
+
   ]);
   
   const [review1, review2, review3] = await Promise.all([

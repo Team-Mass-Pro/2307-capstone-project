@@ -22,6 +22,54 @@ const {
 } = require('./cart');
 
 const {
+  createWishlist,
+  fetchWishlists,
+  deleteWishlist
+} = require('./wishlists')
+
+
+const seed = async()=> {
+  const SQL = `
+    DROP TABLE IF EXISTS wishlists;
+    DROP TABLE IF EXISTS line_items;
+    DROP TABLE IF EXISTS products;
+    DROP TABLE IF EXISTS orders;
+    DROP TABLE IF EXISTS users;
+
+    CREATE TABLE users(
+      id UUID PRIMARY KEY,
+      created_at TIMESTAMP DEFAULT now(),
+      username VARCHAR(100) UNIQUE NOT NULL,
+      password VARCHAR(100) NOT NULL,
+      is_admin BOOLEAN DEFAULT false NOT NULL
+    );
+
+    CREATE TABLE products(
+      id UUID PRIMARY KEY,
+      created_at TIMESTAMP DEFAULT now(),
+      name VARCHAR(100) UNIQUE NOT NULL,
+      price INTEGER
+
+    );
+
+    CREATE TABLE orders(
+      id UUID PRIMARY KEY,
+      created_at TIMESTAMP DEFAULT now(),
+      is_cart BOOLEAN NOT NULL DEFAULT true,
+      user_id UUID REFERENCES users(id) NOT NULL,
+      address VARCHAR(255)
+    );
+
+    CREATE TABLE line_items(
+      id UUID PRIMARY KEY,
+      created_at TIMESTAMP DEFAULT now(),
+      product_id UUID REFERENCES products(id) NOT NULL,
+      order_id UUID REFERENCES orders(id) NOT NULL,
+      quantity INTEGER DEFAULT 1,
+      CONSTRAINT product_and_order_key UNIQUE(product_id, order_id)
+    );
+
+const {
   createReview,
   fetchReviews
 } = require('./reviews');
@@ -91,6 +139,13 @@ const seed = async()=> {
     name VARCHAR(50)
   );
 
+    CREATE TABLE wishlists(
+      id UUID PRIMARY KEY,
+      user_id UUID REFERENCES users(id) NOT NULL,
+      product_id UUID REFERENCES products(id) NOT NULL,
+      CONSTRAINT product_and_user_key UNIQUE(product_id, user_id)
+    )
+
   `;
   await client.query(SQL);
 
@@ -150,6 +205,9 @@ module.exports = {
   createLineItem,
   updateLineItem,
   deleteLineItem,
+  createWishlist,
+  fetchWishlists,
+  deleteWishlist,
   updateOrder,
   authenticate,
   findUserByToken,

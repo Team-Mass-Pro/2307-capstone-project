@@ -15,6 +15,7 @@ const App = ()=> {
   const [reviews, setReviews] = useState([]);
   //const [users, setUsers] = useState([]);
   const [auth, setAuth] = useState({});
+  const [wishlists, setWishlists] = useState([]);
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
 
@@ -54,11 +55,28 @@ const App = ()=> {
   useEffect(()=> {
     if(auth.id){
       const fetchData = async()=> {
+        await api.fetchWishlists(setWishlists);
+      };
+      fetchData();
+    }
+  }, [auth]);
+  
+  useEffect(()=> {
+    if(auth.id){
+      const fetchData = async()=> {
         await api.fetchReviews(setReviews);
       };
       fetchData();
     }
   }, [auth]);
+
+  const createWishlist = async(wishlist)=> {
+    await api.createWishlist(wishlist,wishlists,setWishlists);
+  }
+
+  const deleteWishlist = async(wishlist)=> {
+    await api.deleteWishlist({ wishlist, wishlists, setWishlists });
+  };
 
   useEffect(()=> {
     if(auth.id){
@@ -77,6 +95,7 @@ const App = ()=> {
   //     fetchData();
   //   }
   // }, [auth]);
+
 
   const createLineItem = async(product)=> {
     await api.createLineItem({ product, cart, lineItems, setLineItems});
@@ -158,6 +177,11 @@ const App = ()=> {
                 cartItems = { cartItems }
                 createLineItem = { createLineItem }
                 updateLineItem = { updateLineItem }
+                wishlists = { wishlists }
+                createWishlist = { createWishlist }
+                deleteWishlist = { deleteWishlist }
+                />}/>
+                <Route path = '/cart' element={<Cart
                 tags = { tags }
               />
               <Cart
@@ -227,6 +251,9 @@ const App = ()=> {
               createLineItem = { createLineItem }
               updateLineItem = { updateLineItem }
               auth = { auth }
+              wishlists = { wishlists }
+              createWishlist = { createWishlist }
+              deleteWishlist = { deleteWishlist }
               tags = { tags }
             />
           </div>

@@ -93,6 +93,7 @@ const seed = async()=> {
     createProduct({ name: 'quq', price: 25, description: 'This is a test of the quq description', is_vip:false}),
     createProduct({ name: 'dodgerBlue', price: 40, description: 'official color of the Los Angeles Dodgers', is_vip:true}),
     createProduct({ name: 'aqua', price: 35, description: 'light blue with hints of green', is_vip:true}),
+
   ]);
   const [review1, review2, review3] = await Promise.all([
     createReview({ product_id: foo.id, author: 'lucy', text: 'good', rating: 4}),

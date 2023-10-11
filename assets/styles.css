@@ -10,3 +10,9 @@ form {
 form > * {
   margin: 0.5rem;
 }
+
+.clickedtrue{
+  color: gray;
+  background-color: white;
+  border-color: lightgray;
+}

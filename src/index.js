@@ -6,6 +6,7 @@ import Product from './Product';
 import Orders from './Orders';
 import Cart from './Cart';
 import Login from './Login';
+import Users from './Users';
 import api from './api';
 
 const App = ()=> {
@@ -13,8 +14,9 @@ const App = ()=> {
   const [orders, setOrders] = useState([]);
   const [lineItems, setLineItems] = useState([]);
   const [reviews, setReviews] = useState([]);
-  //const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState([]);
   const [auth, setAuth] = useState({});
+  const [wishlists, setWishlists] = useState([]);
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
 
@@ -54,29 +56,47 @@ const App = ()=> {
   useEffect(()=> {
     if(auth.id){
       const fetchData = async()=> {
+        await api.fetchWishlists(setWishlists);
+      };
+      fetchData();
+    }
+  }, [auth]);
+  
+  useEffect(()=> {
+    if(auth.id){
+      const fetchData = async()=> {
         await api.fetchReviews(setReviews);
       };
       fetchData();
     }
   }, [auth]);
 
+  const createWishlist = async(wishlist)=> {
+    await api.createWishlist(wishlist,wishlists,setWishlists);
+  }
+
+  const deleteWishlist = async(wishlist)=> {
+    await api.deleteWishlist({ wishlist, wishlists, setWishlists });
+  };
+
   useEffect(()=> {
     if(auth.id){
       const fetchData = async()=> {
         await api.fetchTags(setTags);
-        console.log(tags);
       };
       fetchData();
     }
   }, [auth]);
-  // useEffect(()=> {
-  //   if(auth.id){
-  //     const fetchData = async()=> {
-  //       await api.fetchUsers(setUsers);
-  //     };
-  //     fetchData();
-  //   }
-  // }, [auth]);
+  
+  useEffect(()=> {
+    if(auth.id){
+      const fetchData = async()=> {
+        await api.fetchUsers(setUsers);
+      };
+      fetchData();
+    }
+  }, [auth]);
+
 
   const createLineItem = async(product)=> {
     await api.createLineItem({ product, cart, lineItems, setLineItems});
@@ -97,6 +117,10 @@ const App = ()=> {
 
   const removeFromCart = async(lineItem)=> {
     await api.removeFromCart({ lineItem, lineItems, setLineItems });
+  };
+
+  const updateUser = async(user)=> {
+    await api.updateUser({ user, setUsers });
   };
 
   const cart = orders.find(order => order.is_cart) || {};
@@ -129,6 +153,7 @@ const App = ()=> {
   
   const logout = ()=> {
     api.logout(setAuth);
+    setUsers([]);
     navigate(`/`);
   }
   return (
@@ -146,6 +171,7 @@ const App = ()=> {
                 <button onClick={ logout }>Logout</button>
               </span>
             </nav>
+            {auth.is_admin ? <div className='adminNav'><h6>Admin Tools</h6><nav><Link to='/users'>Users</Link></nav></div> : ''}
             <main>
             <Routes>
 
@@ -158,6 +184,11 @@ const App = ()=> {
                 cartItems = { cartItems }
                 createLineItem = { createLineItem }
                 updateLineItem = { updateLineItem }
+                wishlists = { wishlists }
+                createWishlist = { createWishlist }
+                deleteWishlist = { deleteWishlist }
+                />}/>
+                <Route path = '/cart' element={<Cart
                 tags = { tags }
               />
               <Cart
@@ -212,10 +243,20 @@ const App = ()=> {
                 auth = {auth}
                 createReview = {createReview}
               />}
-        
-        />
-            </Routes>
             
+            />
+            {auth.is_admin ? <>
+              <Route path='/users' element={ 
+                <Users
+                users = {users}
+                updateUser = {updateUser}
+                auth = {auth}
+                setAuth = {setAuth}
+                />}
+              />
+              </> : ''}
+
+            </Routes>
             </main>
             </>
         ):(
@@ -227,6 +268,9 @@ const App = ()=> {
               createLineItem = { createLineItem }
               updateLineItem = { updateLineItem }
               auth = { auth }
+              wishlists = { wishlists }
+              createWishlist = { createWishlist }
+              deleteWishlist = { deleteWishlist }
               tags = { tags }
             />
           </div>

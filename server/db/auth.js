@@ -4,7 +4,7 @@ const uuidv4 = v4;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const findUserByToken = async(token) => {
+const findUserByToken = async (token) => {
   try {
     const payload = await jwt.verify(token, process.env.JWT);
     const SQL = `
@@ -13,7 +13,7 @@ const findUserByToken = async(token) => {
       WHERE id = $1
     `;
     const response = await client.query(SQL, [payload.id]);
-    if(!response.rows.length){
+    if (!response.rows.length) {
       const error = Error('bad credentials');
       error.status = 401;
       throw error;
@@ -21,7 +21,7 @@ const findUserByToken = async(token) => {
 
     return response.rows[0];
   }
-  catch(ex){
+  catch (ex) {
     console.log(ex);
     const error = Error('bad credentials');
     error.status = 401;
@@ -29,20 +29,20 @@ const findUserByToken = async(token) => {
   }
 }
 
-const authenticate = async(credentials)=> {
+const authenticate = async (credentials) => {
   const SQL = `
     SELECT id, password
     FROM users
     WHERE username = $1
   `;
   const response = await client.query(SQL, [credentials.username]);
-  if(!response.rows.length){
+  if (!response.rows.length) {
     const error = Error('bad credentials');
     error.status = 401;
     throw error;
   }
   const valid = await bcrypt.compare(credentials.password, response.rows[0].password);
-  if(!valid){
+  if (!valid) {
     const error = Error('bad credentials');
     error.status = 401;
     throw error;
@@ -51,15 +51,15 @@ const authenticate = async(credentials)=> {
   return jwt.sign({ id: response.rows[0].id }, process.env.JWT);
 };
 
-const createUser = async(user)=> {
-  if(!user.username.trim() || !user.password.trim()){
+const createUser = async (user) => {
+  if (!user.username.trim() || !user.password.trim()) {
     throw Error('must have username and password');
   }
   user.password = await bcrypt.hash(user.password, 5);
   const SQL = `
-    INSERT INTO users (id, username, password, is_admin, is_vip) VALUES($1, $2, $3, $4, $5) RETURNING *
+    INSERT INTO users (id, username, password, is_admin, is_vip, avatar) VALUES($1, $2, $3, $4, $5, $6) RETURNING *
   `;
-  const response = await client.query(SQL, [ uuidv4(), user.username, user.password, user.is_admin, user.is_vip ]);
+  const response = await client.query(SQL, [uuidv4(), user.username, user.password, user.is_admin, user.is_vip, user.avatar || null]);
   return response.rows[0];
 };
 

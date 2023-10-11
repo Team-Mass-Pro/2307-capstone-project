@@ -1,7 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Products = ({ products, cartItems, createLineItem, updateLineItem, auth})=> {
+const Wishlist = ({product, wishlist, createWishlist, deleteWishlist}) => {
+  return (
+    <div>
+      {
+        wishlist ? <button onClick={ () => deleteWishlist(wishlist)}>Remove From Wishlist</button> 
+        : <button onClick = { () => createWishlist ({ product_id: product.id}) }>Add to Wishlist</button>
+      }
+    </div>
+  )
+}
+
+const Products = ({ products, cartItems, createLineItem, updateLineItem, auth, wishlists, createWishlist, deleteWishlist})=> {
   return (
     <div>
       <h2>Products</h2>
@@ -22,6 +33,11 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, auth})=
                   auth.is_admin ? (
                     <Link to={`/products/${product.id}/edit`}>Edit</Link>
                   ): null
+                }
+                {
+                  auth.id ? <Wishlist product={ product } wishlist = { wishlists.find(wishlist => wishlist.product_id === product.id) }
+                  createWishlist = { createWishlist } deleteWishlist = { deleteWishlist }
+                  />: null
                 }
               </li>
             );

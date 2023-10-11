@@ -22,7 +22,8 @@ const {
 
 const {
   createWishlist,
-  fetchWishlists
+  fetchWishlists,
+  deleteWishlist
 } = require('./wishlists')
 
 
@@ -111,6 +112,9 @@ module.exports = {
   createLineItem,
   updateLineItem,
   deleteLineItem,
+  createWishlist,
+  fetchWishlists,
+  deleteWishlist,
   updateOrder,
   authenticate,
   findUserByToken,

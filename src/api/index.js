@@ -23,6 +23,21 @@ const fetchLineItems = async(setLineItems)=> {
   setLineItems(response.data);
 };
 
+const fetchWishlists = async(setWishlists)=> {
+  const response = await axios.get('/api/wishlists', getHeaders());
+  setWishlists(response.data);
+}
+
+const createWishlist = async(wishlist, wishlists,setWishlists) => {
+  const response = await axios.post('/api/wishlists', wishlist, getHeaders());
+  setWishlists([...wishlists, response.data])
+}
+
+const deleteWishlist = async({ wishlist, wishlists, setWishlists })=> {
+  const response = await axios.delete(`/api/wishlists/${wishlist.id}`, getHeaders());
+  setWishlists(wishlists.filter( _wishlist => _wishlist.id !== wishlist.id));
+};
+
 const createLineItem = async({ product, cart, lineItems, setLineItems })=> {
   const response = await axios.post('/api/lineItems', {
     order_id: cart.id,
@@ -91,6 +106,9 @@ const api = {
   fetchLineItems,
   createLineItem,
   updateLineItem,
+  fetchWishlists,
+  createWishlist,
+  deleteWishlist,
   updateOrder,
   removeFromCart,
   attemptLoginWithToken

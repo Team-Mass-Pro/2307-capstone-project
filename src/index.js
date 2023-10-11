@@ -13,6 +13,7 @@ const App = ()=> {
   const [orders, setOrders] = useState([]);
   const [lineItems, setLineItems] = useState([]);
   const [auth, setAuth] = useState({});
+  const [wishlists, setWishlists] = useState([]);
 
   const attemptLoginWithToken = async()=> {
     await api.attemptLoginWithToken(setAuth);
@@ -47,6 +48,22 @@ const App = ()=> {
     }
   }, [auth]);
 
+  useEffect(()=> {
+    if(auth.id){
+      const fetchData = async()=> {
+        await api.fetchWishlists(setWishlists);
+      };
+      fetchData();
+    }
+  }, [auth]);
+
+  const createWishlist = async(wishlist)=> {
+    await api.createWishlist(wishlist,wishlists,setWishlists);
+  }
+
+  const deleteWishlist = async(wishlist)=> {
+    await api.deleteWishlist({ wishlist, wishlists, setWishlists });
+  };
 
   const createLineItem = async(product)=> {
     await api.createLineItem({ product, cart, lineItems, setLineItems});
@@ -117,6 +134,9 @@ const App = ()=> {
                 cartItems = { cartItems }
                 createLineItem = { createLineItem }
                 updateLineItem = { updateLineItem }
+                wishlists = { wishlists }
+                createWishlist = { createWishlist }
+                deleteWishlist = { deleteWishlist }
                 />}/>
                 <Route path = '/cart' element={<Cart
                 cart = { cart }
@@ -146,6 +166,9 @@ const App = ()=> {
               createLineItem = { createLineItem }
               updateLineItem = { updateLineItem }
               auth = { auth }
+              wishlists = { wishlists }
+              createWishlist = { createWishlist }
+              deleteWishlist = { deleteWishlist }
             />
           </div>
         )

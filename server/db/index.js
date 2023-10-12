@@ -138,7 +138,6 @@ const seed = async () => {
     createUser({ username: 'ethyl', password: '1234', is_admin: true, is_vip: true, avatar: ethylAvatar })
   ]);
 
-  await updateAvatar ({...moe, avatar: moeAvatar})
 
   const [foo, bar, bazz] = await Promise.all([
     createProduct({ name: 'red', price: 10, description: 'color of passion', is_vip: false, tags: 'red primary' }),

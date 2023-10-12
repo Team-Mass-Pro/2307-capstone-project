@@ -12,10 +12,8 @@ const {
   authenticate,
   fetchUsers,
   updateUser,
-  findUserByToken,
-  updateAvatar
+  findUserByToken
 } = require('./auth');
-console.log(updateAvatar);
 
 const {
   fetchLineItems,
@@ -138,7 +136,6 @@ const seed = async () => {
     createUser({ username: 'ethyl', password: '1234', is_admin: true, is_vip: true, avatar: ethylAvatar })
   ]);
 
-  await updateAvatar ({...moe, avatar: moeAvatar})
 
   const [foo, bar, bazz] = await Promise.all([
     createProduct({ name: 'red', price: 10, description: 'color of passion', is_vip: false, tags: 'red primary' }),
@@ -153,20 +150,6 @@ const seed = async () => {
     createProduct({ name: 'dodgerBlue', price: 40, description: 'official color of the Los Angeles Dodgers', is_vip: true, tags: 'special blue vip' }),
     createProduct({ name: 'aqua', price: 35, description: 'light blue with hints of green', is_vip: true, tags: 'special blue light vip' }),
     createProduct({ name: 'gold', price: 50, description: 'yellow for royals', is_vip: true, tags: 'special yellow vip' })
-
-    createProduct({ name: 'red', price: 10, description: 'color of passion', is_vip:false, tags:'red primary'}),
-    createProduct({ name: 'green', price: 15, description: "nature's color", is_vip:false, tags:'secondary'}),
-    createProduct({ name: 'pink', price: 20, description: 'like red but cuter', is_vip:false, tags:'red light'}),
-    createProduct({ name: 'blue', price: 25, description: 'calming color', is_vip:false, tags:'blue primary'}),
-    createProduct({ name: 'black', price: 5, description: 'absense of light', is_vip:false, tags:'monochrome dark'}),
-    createProduct({ name: 'yellow', price: 15, description: 'fills you with joy', is_vip:false, tags:'yellow primary'}),
-    createProduct({ name: 'orange', price: 20, description: "the color of oranges", is_vip:false, tags:'secondary'}),
-    createProduct({ name: 'white', price: 5, description: 'white', is_vip:false, tags:'monochrome light'}),
-    createProduct({ name: 'purple', price: 30, description: "Very valuable in olden times", is_vip:true, tags:'secondary vip'}),
-    createProduct({ name: 'dodgerBlue', price: 40, description: 'official color of the Los Angeles Dodgers', is_vip:true, tags:'special blue vip'}),
-    createProduct({ name: 'aqua', price: 35, description: 'light blue with hints of green', is_vip:true, tags:'special blue light vip'}),
-    createProduct({ name: 'gold', price: 50, description: 'yellow for royals', is_vip:true, tags:'special yellow vip'})
-
   ]);
 
   const [review1, review2, review3] = await Promise.all([
@@ -214,7 +197,6 @@ module.exports = {
   createUser,
   fetchUsers,
   updateUser,
-  updateAvatar,
   createReview,
   fetchReviews,
   seed,

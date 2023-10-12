@@ -37,10 +37,6 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, auth, w
   };
 
   let filteredProducts = products;
-<<<<<<< HEAD
-=======
-
->>>>>>> eaa12d0e78850c4d31dbc10e46fdf38e0a335d1d
   if (!auth.is_vip) {
     filteredProducts = products.filter((p) => !p.is_vip);
   }

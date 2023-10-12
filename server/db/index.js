@@ -12,10 +12,8 @@ const {
   authenticate,
   fetchUsers,
   updateUser,
-  findUserByToken,
-  updateAvatar
+  findUserByToken
 } = require('./auth');
-console.log(updateAvatar);
 
 const {
   fetchLineItems,
@@ -199,7 +197,6 @@ module.exports = {
   createUser,
   fetchUsers,
   updateUser,
-  updateAvatar,
   createReview,
   fetchReviews,
   seed,

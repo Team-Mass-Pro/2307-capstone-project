@@ -92,6 +92,19 @@ const updateUser = async({ user, setUsers })=> {
   setUsers(response.data);
 };
 
+const updateProduct = async({ product, setProducts })=> {
+  console.log(`/api/products/${product.id}`);
+  await axios.put(`/api/products/${product.id}`, product, getHeaders());
+  const response = await axios.get('/api/products', getHeaders());
+  setProducts(response.data);
+};
+
+const createProduct = async({ product, products, setProducts })=> {
+  const response = await axios.post('/api/products', product, getHeaders());
+  setProducts([...products, response.data]);
+  return response.data;
+}
+
 const removeFromCart = async({ lineItem, lineItems, setLineItems })=> {
   const response = await axios.delete(`/api/lineItems/${lineItem.id}`, getHeaders());
   setLineItems(lineItems.filter( _lineItem => _lineItem.id !== lineItem.id));
@@ -145,6 +158,8 @@ const api = {
   deleteWishlist,
   updateOrder,
   updateUser,
+  updateProduct,
+  createProduct,
   removeFromCart,
   createReview,
   fetchReviews,

@@ -2,7 +2,8 @@ const client = require('./client');
 
 const {
   fetchProducts,
-  createProduct
+  createProduct,
+  updateProduct
 } = require('./products');
 
 const {
@@ -160,6 +161,8 @@ const seed = async()=> {
 
 module.exports = {
   fetchProducts,
+  updateProduct,
+  createProduct,
   fetchOrders,
   fetchLineItems,
   createLineItem,

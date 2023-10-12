@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client';
 import { Link, HashRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import Products from './Products';
 import Product from './Product';
+import Product_edit from './Product_edit';
+import Product_create from './Product_create';
 import Orders from './Orders';
 import Cart from './Cart';
 import Login from './Login';
@@ -103,6 +105,11 @@ const App = ()=> {
     await api.createLineItem({ product, cart, lineItems, setLineItems});
   };
 
+  const createProduct = async(product)=> {
+    const data = await api.createProduct({ product, products, setProducts});
+    navigate(`/products/${data.id}/edit`);
+  };
+
   const updateLineItem = async(lineItem)=> {
     await api.updateLineItem({ lineItem, cart, lineItems, setLineItems });
   };
@@ -114,6 +121,10 @@ const App = ()=> {
 
   const updateOrder = async(order)=> {
     await api.updateOrder({ order, setOrders});
+  };
+
+  const updateProduct = async(product)=> {
+    await api.updateProduct({ product, setProducts});
   };
 
   const removeFromCart = async(lineItem)=> {
@@ -173,7 +184,10 @@ const App = ()=> {
                 <button onClick={ logout }>Logout</button>
               </span>
             </nav>
-            {auth.is_admin ? <div className='adminNav'><h6>Admin Tools</h6><nav><Link to='/users'>Users</Link></nav></div> : ''}
+            {auth.is_admin ? <div className='adminNav'><h6>Admin Tools</h6><nav>
+              <Link to='/users'>Users</Link>
+              <Link to='/createProduct'>Create Product</Link>
+              </nav></div> : ''}
             <main>
             <Routes>
 
@@ -252,6 +266,14 @@ const App = ()=> {
               />}
             
             />
+
+            <Route path='/products/:id/edit' element={ 
+              <Product_edit
+                products = { products }
+                reviews = { reviews }
+                updateProduct ={updateProduct}
+              />}
+            />      
             <Route path='/wishlists' element={
               <Wishlists
               wishlists = { wishlists }
@@ -265,6 +287,11 @@ const App = ()=> {
                 updateUser = {updateUser}
                 auth = {auth}
                 setAuth = {setAuth}
+                />}
+              />
+              <Route path='/createProduct' element={ 
+                <Product_create
+                  createProduct ={createProduct}
                 />}
               />
               </> : ''}

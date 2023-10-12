@@ -4,7 +4,8 @@ const fs = require('fs');
 
 const {
   fetchProducts,
-  createProduct
+  createProduct,
+  updateProduct
 } = require('./products');
 
 const {
@@ -183,6 +184,8 @@ const seed = async () => {
 
 module.exports = {
   fetchProducts,
+  updateProduct,
+  createProduct,
   fetchOrders,
   fetchLineItems,
   createLineItem,

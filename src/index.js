@@ -167,7 +167,7 @@ const App = ()=> {
               <Link to='/products'>Products ({ products.length })</Link>
               <Link to='/cart'>Cart ({ cartCount })</Link>
               <Link to='/orders'>Orders ({ orders.filter(order => !order.is_cart).length })</Link>
-              <Link to='/wishlists'>Wishlists ({ wishlists.length})</Link>
+              <Link to='/wishlists'>Wishlist ({ wishlists.length})</Link>
               <span>
                 Welcome { auth.username }! {auth.is_vip ? "You are a VIP Member": ""}
                 <button onClick={ logout }>Logout</button>

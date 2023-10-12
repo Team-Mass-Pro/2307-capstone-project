@@ -133,4 +133,4 @@ auth.id ? <Wishlist product={ product } wishlist = { wishlists.find(wishlist => 
 createWishlist = { createWishlist } deleteWishlist = { deleteWishlist }
 />: null
 }
-                */
+      */

@@ -12,8 +12,10 @@ const {
   authenticate,
   fetchUsers,
   updateUser,
-  findUserByToken
+  findUserByToken,
+  updateAvatar
 } = require('./auth');
+console.log(updateAvatar);
 
 const {
   fetchLineItems,
@@ -123,7 +125,6 @@ const seed = async () => {
     product_id UUID REFERENCES products(id) NOT NULL,
     CONSTRAINT product_and_user_key UNIQUE(product_id, user_id)
   )
-
   `;
   await client.query(SQL);
 
@@ -136,6 +137,9 @@ const seed = async () => {
     createUser({ username: 'lucy', password: 'l_password', is_admin: false, is_vip: false, avatar: lucyAvatar }),
     createUser({ username: 'ethyl', password: '1234', is_admin: true, is_vip: true, avatar: ethylAvatar })
   ]);
+
+  await updateAvatar ({...moe, avatar: moeAvatar})
+
   const [foo, bar, bazz] = await Promise.all([
     createProduct({ name: 'red', price: 10, description: 'color of passion', is_vip: false, tags: 'red primary' }),
     createProduct({ name: 'green', price: 15, description: "nature's color", is_vip: false, tags: 'secondary' }),
@@ -196,6 +200,7 @@ module.exports = {
   createUser,
   fetchUsers,
   updateUser,
+  updateAvatar,
   createReview,
   fetchReviews,
   seed,

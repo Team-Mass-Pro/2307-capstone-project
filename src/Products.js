@@ -17,28 +17,32 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, auth, w
   const [searchTerm, setSearchTerm] = useState('');
   const [bookmarkedSearchTerm, setBookmarkedSearchTerm] = useState('');
   const [activeTags, setActiveTags] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 10;
 
-  
+
   const actTags = {};
-  tags.forEach((t)=> {
-      actTags[t.name] = false;
-      if(activeTags[t.name]=== true){
-        actTags[t.name] = activeTags[t.name];
-      }
+  tags.forEach((t) => {
+    actTags[t.name] = false;
+    if (activeTags[t.name] === true) {
+      actTags[t.name] = activeTags[t.name];
+    }
   });
-  
+
   //setActiveTags();
   // Function to handle searching and filtering products
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
+    setCurrentPage(1); // Reset to the first page when the search term changes
   };
+
   let filteredProducts = products;
-  if(!auth.is_vip){
+  if (!auth.is_vip) {
     filteredProducts = products.filter((p) => !p.is_vip);
   }
 
   for (const isActive in activeTags) {
-    if(activeTags[isActive]){
+    if (activeTags[isActive]) {
       filteredProducts = filteredProducts.filter((p) => p.tags.toLowerCase().includes(isActive.toLowerCase()));
     }
   }
@@ -61,6 +65,7 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, auth, w
     const savedSearchTerm = localStorage.getItem('bookmarkedSearchTerm');
     if (savedSearchTerm) {
       setSearchTerm(savedSearchTerm);
+      setCurrentPage(1); // Reset to the first page when restoring bookmarks
     }
   };
 
@@ -71,6 +76,11 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, auth, w
       setBookmarkedSearchTerm(savedSearchTerm);
     }
   }, []);
+
+  // Calculate the range of products to display on the current page
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
 
   return (
     <div>
@@ -83,25 +93,25 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, auth, w
           value={searchTerm}
           onChange={handleSearch}
         />
-        <button onClick={handleBookmark}>Bookmark Search</button>
-        <button onClick={handleRestoreBookmark}>Restore Bookmark</button>
+        <button onClick={handleBookmark}>Bookmark Your Search Results</button>
+        <button onClick={handleRestoreBookmark}>Restore Saved Bookmark</button>
       </div>
       <div>
         Filter by Tag
-        {tags.map((t)=>{
-          return(
-            <button className={'clicked'+activeTags[t.name]} key={t.id} onClick={()=>{actTags[t.name] = !actTags[t.name];setActiveTags(actTags)}}>{t.name}</button>
-            
+        {tags.map((t) => {
+          return (
+            <button className={'clicked' + activeTags[t.name]} key={t.id} onClick={() => { actTags[t.name] = !actTags[t.name]; setActiveTags(actTags) }}>{t.name}</button>
+
           )
         })}
       </div>
       <ul>
-        
-        {filteredProducts.map((product) => {
+
+        {currentProducts.map((product) => {
           const cartItem = cartItems.find((lineItem) => lineItem.product_id === product.id);
           return (
             <li key={product.id}>
-              {product.is_vip ? <span className = "vip">VIP </span>:''}
+              {product.is_vip ? <span className="vip">VIP </span> : ''}
               <Link to={`/products/${product.id}`}>{product.name}</Link> ${product.price}
               {auth.id ? (
                 cartItem ? (
@@ -111,6 +121,7 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, auth, w
                 )
               ) : null}
               {auth.is_admin ? <Link to={`/products/${product.id}/edit`}>Edit</Link> : null}
+
               <div>{product.description}</div>
               {
                 auth.id ? <Wishlist product={ product } wishlist = { wishlists.find(wishlist => wishlist.product_id === product.id) }
@@ -121,6 +132,22 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, auth, w
           );
         })}
       </ul>
+
+      {/* Pagination Buttons */}
+      <div className="pagination">
+        <button
+          onClick={() => setCurrentPage(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        <button
+          onClick={() => setCurrentPage(currentPage + 1)}
+          disabled={indexOfLastProduct >= filteredProducts.length}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };
@@ -133,4 +160,4 @@ auth.id ? <Wishlist product={ product } wishlist = { wishlists.find(wishlist => 
 createWishlist = { createWishlist } deleteWishlist = { deleteWishlist }
 />: null
 }
-                */
+      */

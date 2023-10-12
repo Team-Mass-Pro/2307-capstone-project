@@ -10,6 +10,7 @@ import Cart from './Cart';
 import Login from './Login';
 import Users from './Users';
 import api from './api';
+import Wishlists from './Wishlists';
 
 const App = ()=> {
   const [products, setProducts] = useState([]);
@@ -177,6 +178,7 @@ const App = ()=> {
               <Link to='/products'>Products ({ products.length })</Link>
               <Link to='/cart'>Cart ({ cartCount })</Link>
               <Link to='/orders'>Orders ({ orders.filter(order => !order.is_cart).length })</Link>
+              <Link to='/wishlists'>Wishlist ({ wishlists.length})</Link>
               <span>
                 Welcome { auth.username }! {auth.is_vip ? "You are a VIP Member": ""}
                 <button onClick={ logout }>Logout</button>
@@ -216,6 +218,10 @@ const App = ()=> {
                 orders = { orders }
                 products = { products }
                 lineItems = { lineItems }
+              />
+              <Wishlists
+                wishlists = { wishlists }
+                products = { products }
               />
             </>
             }
@@ -260,13 +266,19 @@ const App = ()=> {
               />}
             
             />
+
             <Route path='/products/:id/edit' element={ 
               <Product_edit
                 products = { products }
                 reviews = { reviews }
                 updateProduct ={updateProduct}
               />}
-            
+            />      
+            <Route path='/wishlists' element={
+              <Wishlists
+              wishlists = { wishlists }
+              products = { products }
+              />}
             />
             {auth.is_admin ? <>
               <Route path='/users' element={ 

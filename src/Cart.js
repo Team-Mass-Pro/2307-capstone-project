@@ -1,9 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import AddressAutocomplete from './AddressAutocomplete';
+// import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
+// import { loadScript } from '@react-google-maps/api';
+
+const loadGoogleMapsScript = (callback) => {
+  console.log(callback);
+  const apiKey = 'AIzaSyBxXjUJQNYCbUSp4YWsEff8ePZvJONEIao'; // Google places API key
+  const script = document.createElement('script');
+  script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+  script.defer = true;
+  
+  script.onload = () => {
+    callback();
+  
+  };
+
+  document.head.appendChild(script);
+};
+
 
 
 const Cart = ({ updateOrder, removeFromCart, lineItems, cart, products,updateLineItem,decreaseLineItem })=> {
 
-  const [address, setAdress] = useState('');
+  const [address, setAddress] = useState('');
+
+  useEffect(() => {
+    // Loading the Google Maps API script with the API key
+    loadGoogleMapsScript(() => {
+      console.log(google)
+      console.log('Google Maps API script loaded.');
+    });
+  }, []); // Empty dependency array to run this effect only once
 
   if (!lineItems || lineItems.length === 0) {
     return <p>Add some items to your cart</p>;
@@ -46,7 +73,12 @@ const Cart = ({ updateOrder, removeFromCart, lineItems, cart, products,updateLin
       </ul>
       {
         lineItems.filter(lineItem => lineItem.order_id === cart.id ).length ? <>
-        <div>Enter your shipping address:<input placeholder='address' value={ address } onChange={ ev => setAdress(ev.target.value)}/></div>
+        {/* Prior shipping address input */}
+        {/* <div>Enter your shipping address:<input placeholder='address' value={ address } onChange={ ev => setAddress(ev.target.value)}/></div> */}
+        <div>
+        
+        <AddressAutocomplete address={address} setAddress={setAddress} />
+      </div>
         <button onClick={()=> {updateOrder({...cart, is_cart: false, address });}}>Create Order</button>
         </>
         : 'Add some items to your cart pls'

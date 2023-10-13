@@ -222,6 +222,7 @@ const App = ()=> {
               <Wishlists
                 wishlists = { wishlists }
                 products = { products }
+                deleteWishlist = { deleteWishlist }
               />
             </>
             }
@@ -278,6 +279,7 @@ const App = ()=> {
               <Wishlists
               wishlists = { wishlists }
               products = { products }
+              deleteWishlist = { deleteWishlist }
               />}
             />
             {auth.is_admin ? <>

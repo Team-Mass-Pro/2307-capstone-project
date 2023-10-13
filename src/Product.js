@@ -13,16 +13,16 @@ const Product = ({products,reviews,auth,createReview}) => {
       return null;
     }
     const save = (ev)=> {
-       ev.preventDefault();
-       const review = {
-         product_id: product.id,
-         author: auth.username,
-         text: text,
-         rating: rating
-       };
-       createReview(review);
-       setText('');
-       setRating(0);
+        ev.preventDefault();
+        const review = {
+          product_id: product.id,
+          author: auth.username,
+          text: text,
+          rating: rating
+        };
+      createReview(review);
+      setText('');
+      setRating(0);
     }
   
     return(

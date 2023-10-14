@@ -50,7 +50,7 @@ app.get('/users', isLoggedIn, isAdmin, async(req, res, next)=> {
    }
  });
 
- app.put('/users/:id', isLoggedIn, /*isAdmin,*/ async(req, res, next)=> {
+ app.put('/users/:id', isLoggedIn, isAdmin, async(req, res, next)=> {
   
   res.send(await updateUser({ ...req.body, id: req.params.id}));
 });

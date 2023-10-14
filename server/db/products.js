@@ -23,11 +23,11 @@ const createProduct = async (product) => {
 const updateProduct = async(product)=> {
   SQL = `
     UPDATE products
-    SET price = $1, name = $3, description = $4, is_vip = $5
+    SET price = $1, name = $3, description = $4, is_vip = $5, tags = $6
     WHERE id = $2
     RETURNING *
   `;
-  const response = await client.query(SQL, [product.price, product.id, product.name, product.description, product.is_vip]);
+  const response = await client.query(SQL, [product.price, product.id, product.name, product.description, product.is_vip, product.tags]);
   return response.rows[0];
 };
 module.exports = {

@@ -18,11 +18,20 @@ const fetchOrders = async(setOrders)=> {
   setOrders(response.data);
 };
 
+const fetchOrdersAll = async(setOrdersAll)=> {
+  const response = await axios.get('/api/orders/all', getHeaders());
+  setOrdersAll(response.data);
+};
+
 const fetchLineItems = async(setLineItems)=> {
   const response = await axios.get('/api/lineItems', getHeaders());
   setLineItems(response.data);
 };
 
+const fetchLineItemsAll = async(setLineItemsAll)=> {
+  const response = await axios.get('/api/lineItems/all', getHeaders());
+  setLineItemsAll(response.data);
+};
 
 const fetchWishlists = async(setWishlists)=> {
   const response = await axios.get('/api/wishlists', getHeaders());
@@ -104,7 +113,11 @@ const createProduct = async({ product, products, setProducts })=> {
   setProducts([...products, response.data]);
   return response.data;
 }
-
+const createTag = async({ tag, tags, setTags })=> {
+  console.log(tag.name);
+  const response = await axios.post('/api/tags', tag, getHeaders());
+  setTags([...tags, response.data]);
+}
 const removeFromCart = async({ lineItem, lineItems, setLineItems })=> {
   const response = await axios.delete(`/api/lineItems/${lineItem.id}`, getHeaders());
   setLineItems(lineItems.filter( _lineItem => _lineItem.id !== lineItem.id));
@@ -148,7 +161,9 @@ const api = {
   logout,
   fetchProducts,
   fetchOrders,
+  fetchOrdersAll,
   fetchLineItems,
+  fetchLineItemsAll,
   fetchUsers,
   fetchTags,
   createLineItem,
@@ -160,6 +175,7 @@ const api = {
   updateUser,
   updateProduct,
   createProduct,
+  createTag,
   removeFromCart,
   createReview,
   fetchReviews,

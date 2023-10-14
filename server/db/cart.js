@@ -18,6 +18,21 @@ const fetchLineItems = async(userId)=> {
   return response.rows;
 };
 
+const fetchLineItemsAll = async()=> {
+  const SQL = `
+    SELECT line_items.* 
+    FROM
+    line_items
+    JOIN orders
+    ON orders.id = line_items.order_id
+    JOIN users
+    ON users.id = orders.user_id
+    ORDER BY product_id
+  `;
+  const response = await client.query(SQL);
+  return response.rows;
+};
+
 const ensureCart = async(lineItem)=> {
   let orderId = lineItem.order_id;
   if(!orderId){
@@ -100,11 +115,22 @@ const fetchOrders = async(userId)=> {
   return response.rows;
 };
 
+const fetchOrdersAll = async()=> {
+  const SQL = `
+    SELECT * FROM orders ORDER BY user_id
+  `;
+  
+  const response = await client.query(SQL);
+  return response.rows;
+};
+
 module.exports = {
   fetchLineItems,
+  fetchLineItemsAll,
   createLineItem,
   updateLineItem,
   deleteLineItem,
   updateOrder,
-  fetchOrders
+  fetchOrders,
+  fetchOrdersAll
 };

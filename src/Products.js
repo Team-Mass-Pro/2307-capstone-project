@@ -43,7 +43,7 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, auth, w
 
   for (const isActive in activeTags) {
     if (activeTags[isActive]) {
-      filteredProducts = filteredProducts.filter((p) => p.tags.toLowerCase().includes(isActive.toLowerCase()));
+      filteredProducts = filteredProducts.filter((p) => p.tags.toLowerCase().includes(' '+ isActive.toLowerCase() + ' '));
     }
   }
   // activeTags.forEach((at)=>{

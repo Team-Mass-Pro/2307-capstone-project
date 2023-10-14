@@ -6,6 +6,7 @@ import Product from './Product';
 import Product_edit from './Product_edit';
 import Product_create from './Product_create';
 import Orders from './Orders';
+import Orders_all from './Orders_all';
 import Cart from './Cart';
 import Login from './Login';
 import Users from './Users';
@@ -15,7 +16,9 @@ import Wishlists from './Wishlists';
 const App = ()=> {
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [ordersAll, setOrdersAll] = useState([]);
   const [lineItems, setLineItems] = useState([]);
+  const [lineItemsAll, setLineItemsAll] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [users, setUsers] = useState([]);
   const [auth, setAuth] = useState({});
@@ -50,7 +53,25 @@ const App = ()=> {
   useEffect(()=> {
     if(auth.id){
       const fetchData = async()=> {
+        await api.fetchOrdersAll(setOrdersAll);
+      };
+      fetchData();
+    }
+  }, [auth]);
+
+  useEffect(()=> {
+    if(auth.id){
+      const fetchData = async()=> {
         await api.fetchLineItems(setLineItems);
+      };
+      fetchData();
+    }
+  }, [auth]);
+
+  useEffect(()=> {
+    if(auth.id){
+      const fetchData = async()=> {
+        await api.fetchLineItemsAll(setLineItemsAll);
       };
       fetchData();
     }
@@ -108,6 +129,10 @@ const App = ()=> {
   const createProduct = async(product)=> {
     const data = await api.createProduct({ product, products, setProducts});
     navigate(`/products/${data.id}/edit`);
+  };
+
+  const createTag = async(tag)=> {
+    await api.createTag({ tag, tags, setTags});
   };
 
   const updateLineItem = async(lineItem)=> {
@@ -170,6 +195,7 @@ const App = ()=> {
   }
   return (
     <div>
+      <h1>PAINT SHOP</h1>
       {
         auth.id ? (
           <>
@@ -187,6 +213,7 @@ const App = ()=> {
             {auth.is_admin ? <div className='adminNav'><h6>Admin Tools</h6><nav>
               <Link to='/users'>Users</Link>
               <Link to='/createProduct'>Create Product</Link>
+              <Link to='/allOrders'>Show Everyone's Order</Link>
               </nav></div> : ''}
             <main>
             <Routes>
@@ -272,6 +299,8 @@ const App = ()=> {
                 products = { products }
                 reviews = { reviews }
                 updateProduct ={updateProduct}
+                tags = {tags}
+                createTag = {createTag}
               />}
             />      
             <Route path='/wishlists' element={
@@ -292,6 +321,14 @@ const App = ()=> {
               <Route path='/createProduct' element={ 
                 <Product_create
                   createProduct ={createProduct}
+                />}
+              />
+              <Route path='/allOrders' element={ 
+                <Orders_all
+                  ordersAll = {ordersAll}
+                  products = { products }
+                  lineItemsAll = { lineItemsAll }
+                  users = {users}
                 />}
               />
               </> : ''}

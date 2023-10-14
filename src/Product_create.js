@@ -12,11 +12,11 @@ const Product_create = ({createProduct}) => {
 
     const save = (ev)=> {
        ev.preventDefault();
-      //  console.log(vip)
-      //const produck = {name,description,price:price*1,id:product.id,is_vip:vip};
-      createProduct({name,description,price:price*1,is_vip:vip,tags:""});
-
-      //  updateProduct(produck);
+       let tags = "";
+       if(vip){
+        tags = " vip ";
+       }
+      createProduct({name,description,price:price*1,is_vip:vip,tags});
     }
     return(
       <div>

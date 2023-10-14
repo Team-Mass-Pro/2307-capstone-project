@@ -1,5 +1,6 @@
 const {
   fetchLineItems,
+  fetchLineItemsAll,
   createLineItem,
   updateLineItem,
   deleteLineItem,
@@ -17,7 +18,14 @@ app.get('/', isLoggedIn, async(req, res, next)=> {
     next(ex);
   }
 });
-
+app.get('/all', isLoggedIn, isAdmin, async(req, res, next)=> {
+  try {
+    res.send(await fetchLineItemsAll(req.user.id));
+  }
+  catch(ex){
+    next(ex);
+  }
+});
 app.post('/', isLoggedIn, async(req, res, next)=> {
   try {
     //TODO make sure the order's user_id is req.user.id 

@@ -23,3 +23,11 @@ form > * {
   width: 80px;
   height: auto;
 }
+.adminNav{
+  border:dotted rgb(121, 121, 121) 1px;
+  background-color: rgb(216, 216, 216);
+}
+
+.smol{
+  font-size: 9px;
+}

@@ -1,6 +1,7 @@
 const {
     createWishlist,
     fetchWishlists,
+    fetchWishlistsAll,
     deleteWishlist
 
   } = require('../db');
@@ -12,6 +13,15 @@ const { isLoggedIn, isAdmin } = require('./middleware');
 app.get('/', isLoggedIn, async(req, res, next)=> {
   try {
     res.send(await fetchWishlists(req.user.id));
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
+app.get('/all', isLoggedIn, isAdmin, async(req, res, next)=> {
+  try {
+    res.send(await fetchWishlistsAll(req.user.id));
   }
   catch(ex){
     next(ex);

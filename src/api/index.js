@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Wishlists_all from '../Wishlists_all';
 
 const getHeaders = ()=> {
   return {
@@ -38,14 +39,21 @@ const fetchWishlists = async(setWishlists)=> {
   setWishlists(response.data);
 }
 
-const createWishlist = async(wishlist, wishlists,setWishlists) => {
-  const response = await axios.post('/api/wishlists', wishlist, getHeaders());
-  setWishlists([...wishlists, response.data])
+const fetchWishlistsAll = async(setWishlistsAll)=> {
+  const response = await axios.get('/api/wishlists/all', getHeaders());
+  setWishlistsAll(response.data);
 }
 
-const deleteWishlist = async({ wishlist, wishlists, setWishlists })=> {
+const createWishlist = async(wishlist, wishlists,setWishlists, wishlistsAll, setWishlistsAll) => {
+  const response = await axios.post('/api/wishlists', wishlist, getHeaders());
+  setWishlists([...wishlists, response.data])
+  setWishlistsAll([...wishlistsAll, response.data]);
+}
+
+const deleteWishlist = async({ wishlist, wishlists, setWishlists, wishlistsAll, setWishlistsAll})=> {
   const response = await axios.delete(`/api/wishlists/${wishlist.id}`, getHeaders());
   setWishlists(wishlists.filter( _wishlist => _wishlist.id !== wishlist.id));
+  setWishlistsAll(wishlistsAll.filter( _wishlist => _wishlist.id !== wishlist.id));
 };
 
 const fetchReviews = async(setReviews)=> {
@@ -59,7 +67,6 @@ const fetchTags = async(setTags)=> {
 };
 
 const createReview = async(review,reviews,setReviews)=> {
-  console.log(review);
   const response = await axios.post('/api/reviews', review, getHeaders());
   setReviews([...reviews, response.data]);
 }
@@ -73,26 +80,30 @@ const fetchUsers = async(setUsers)=> {
   }
 }
 
-const createLineItem = async({ product, cart, lineItems, setLineItems })=> {
+const createLineItem = async({ product, cart, lineItems, setLineItems, lineItemsAll, setLineItemsAll })=> {
   const response = await axios.post('/api/lineItems', {
     order_id: cart.id,
     product_id: product.id
   }, getHeaders());
   setLineItems([...lineItems, response.data]);
+  setLineItemsAll([...lineItemsAll, response.data]);
 };
 
-const updateLineItem = async({ lineItem, cart, lineItems, setLineItems })=> {
+const updateLineItem = async({ lineItem, cart, lineItems, setLineItems, lineItemsAll, setLineItemsAll  })=> {
   const response = await axios.put(`/api/lineItems/${lineItem.id}`, {
     quantity: lineItem.quantity + 1,
     order_id: cart.id
   }, getHeaders());
   setLineItems(lineItems.map( lineItem => lineItem.id == response.data.id ? response.data: lineItem));
+  setLineItemsAll(lineItemsAll.map( lineItem => lineItem.id == response.data.id ? response.data: lineItem));
 };
 
-const updateOrder = async({ order, setOrders })=> {
+const updateOrder = async({ order, setOrders, setOrdersAll })=> {
   await axios.put(`/api/orders/${order.id}`, order, getHeaders());
-  const response = await axios.get('/api/orders', getHeaders());
+  let response = await axios.get('/api/orders', getHeaders());
   setOrders(response.data);
+  response = await axios.get('/api/orders/all', getHeaders());
+  setOrdersAll(response.data);
 };
 
 const updateUser = async({ user, setUsers })=> {
@@ -102,7 +113,6 @@ const updateUser = async({ user, setUsers })=> {
 };
 
 const updateProduct = async({ product, setProducts })=> {
-  console.log(`/api/products/${product.id}`);
   await axios.put(`/api/products/${product.id}`, product, getHeaders());
   const response = await axios.get('/api/products', getHeaders());
   setProducts(response.data);
@@ -114,13 +124,13 @@ const createProduct = async({ product, products, setProducts })=> {
   return response.data;
 }
 const createTag = async({ tag, tags, setTags })=> {
-  console.log(tag.name);
   const response = await axios.post('/api/tags', tag, getHeaders());
   setTags([...tags, response.data]);
 }
-const removeFromCart = async({ lineItem, lineItems, setLineItems })=> {
+const removeFromCart = async({ lineItem, lineItems, setLineItems,  lineItemsAll, setLineItemsAll   })=> {
   const response = await axios.delete(`/api/lineItems/${lineItem.id}`, getHeaders());
   setLineItems(lineItems.filter( _lineItem => _lineItem.id !== lineItem.id));
+  setLineItemsAll(lineItemsAll.filter( _lineItem => _lineItem.id !== lineItem.id));
 };
 
 const attemptLoginWithToken = async(setAuth)=> {
@@ -169,6 +179,7 @@ const api = {
   createLineItem,
   updateLineItem,
   fetchWishlists,
+  fetchWishlistsAll,
   createWishlist,
   deleteWishlist,
   updateOrder,

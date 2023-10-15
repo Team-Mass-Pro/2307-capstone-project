@@ -2,14 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Wishlists = ({products, wishlists, deleteWishlist}) => {
-    console.log(wishlists.length);
+    
     return (
         <div>
             <h1>You have {wishlists.length} items on your wishlist.</h1>
             <ul>
                 {
                     wishlists.map( product => {
-                        console.log(product)
                         let id = product.product_id;
                         const thisProduct = products.find(p => p.id === id);
                         return (

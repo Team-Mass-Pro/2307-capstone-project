@@ -12,6 +12,7 @@ import Login from './Login';
 import Users from './Users';
 import api from './api';
 import Wishlists from './Wishlists';
+import Wishlists_all from './Wishlists_all';
 
 const App = ()=> {
   const [products, setProducts] = useState([]);
@@ -23,6 +24,7 @@ const App = ()=> {
   const [users, setUsers] = useState([]);
   const [auth, setAuth] = useState({});
   const [wishlists, setWishlists] = useState([]);
+  const [wishlistsAll, setWishlistsAll] = useState([]);
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
 
@@ -89,6 +91,14 @@ const App = ()=> {
   useEffect(()=> {
     if(auth.id){
       const fetchData = async()=> {
+        await api.fetchWishlistsAll(setWishlistsAll);
+      };
+      fetchData();
+    }
+  }, [auth]);
+  useEffect(()=> {
+    if(auth.id){
+      const fetchData = async()=> {
         await api.fetchReviews(setReviews);
       };
       fetchData();
@@ -96,11 +106,11 @@ const App = ()=> {
   }, [auth]);
 
   const createWishlist = async(wishlist)=> {
-    await api.createWishlist(wishlist,wishlists,setWishlists);
+    await api.createWishlist(wishlist,wishlists,setWishlists,wishlistsAll,setWishlistsAll);
   }
 
   const deleteWishlist = async(wishlist)=> {
-    await api.deleteWishlist({ wishlist, wishlists, setWishlists });
+    await api.deleteWishlist({ wishlist, wishlists, setWishlists,wishlistsAll,setWishlistsAll });
   };
 
   useEffect(()=> {
@@ -123,7 +133,7 @@ const App = ()=> {
 
 
   const createLineItem = async(product)=> {
-    await api.createLineItem({ product, cart, lineItems, setLineItems});
+    await api.createLineItem({ product, cart, lineItems, setLineItems, lineItemsAll, setLineItemsAll });
   };
 
   const createProduct = async(product)=> {
@@ -136,16 +146,16 @@ const App = ()=> {
   };
 
   const updateLineItem = async(lineItem)=> {
-    await api.updateLineItem({ lineItem, cart, lineItems, setLineItems });
+    await api.updateLineItem({ lineItem, cart, lineItems, setLineItems, lineItemsAll, setLineItemsAll  });
   };
 
   const decreaseLineItem = async(lineItem)=> {
     lineItem.quantity = lineItem.quantity - 2;
-    await api.updateLineItem({ lineItem, cart, lineItems, setLineItems });
+    await api.updateLineItem({ lineItem, cart, lineItems, setLineItems, lineItemsAll, setLineItemsAll  });
   };
 
   const updateOrder = async(order)=> {
-    await api.updateOrder({ order, setOrders});
+    await api.updateOrder({ order, setOrders, setOrdersAll});
   };
 
   const updateProduct = async(product)=> {
@@ -153,7 +163,7 @@ const App = ()=> {
   };
 
   const removeFromCart = async(lineItem)=> {
-    await api.removeFromCart({ lineItem, lineItems, setLineItems });
+    await api.removeFromCart({ lineItem, lineItems, setLineItems, lineItemsAll, setLineItemsAll });
   };
 
   const updateUser = async(user)=> {
@@ -214,6 +224,7 @@ const App = ()=> {
               <Link to='/users'>Users</Link>
               <Link to='/createProduct'>Create Product</Link>
               <Link to='/allOrders'>Show Everyone's Order</Link>
+              <Link to='/allWishlists'>Show All Wishlists</Link>
               </nav></div> : ''}
             <main>
             <Routes>
@@ -328,6 +339,13 @@ const App = ()=> {
                   ordersAll = {ordersAll}
                   products = { products }
                   lineItemsAll = { lineItemsAll }
+                  users = {users}
+                />}
+              />
+              <Route path='/allWishlists' element={ 
+                <Wishlists_all
+                  products = { products }
+                  wishlistsAll = {wishlistsAll}
                   users = {users}
                 />}
               />

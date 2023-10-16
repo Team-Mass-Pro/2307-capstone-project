@@ -27,7 +27,89 @@ form > * {
   border:dotted rgb(121, 121, 121) 1px;
   background-color: rgb(216, 216, 216);
 }
-
+body{
+  background-image: url(https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/abcd5984-4ffb-45c5-a3a5-4a93386b71ad/d3331h6-4e0743e8-b312-4068-979c-c2b3da9dbe23.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwic3ViIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsImF1ZCI6WyJ1cm46c2VydmljZTpmaWxlLmRvd25sb2FkIl0sIm9iaiI6W1t7InBhdGgiOiIvZi9hYmNkNTk4NC00ZmZiLTQ1YzUtYTNhNS00YTkzMzg2YjcxYWQvZDMzMzFoNi00ZTA3NDNlOC1iMzEyLTQwNjgtOTc5Yy1jMmIzZGE5ZGJlMjMuanBnIn1dXX0.C0ieQ79vZAhtyX9RTozhZscfrJc_AVCc4K-XNQwUGUA);
+  text-align: center;
+}
 .smol{
   font-size: 9px;
+}
+ul{
+  list-style-type: none; /* Remove bullets */
+  padding: 0; /* Remove padding */
+  margin: 0; /* Remove margins */
+}
+
+#foreground{
+  width: 80%;
+  background-color: white;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+  max-width: 1000px;
+  border: solid black 10px;
+}
+
+.biggishfont{
+  margin-top: 10px;
+  font-size: 20px;
+}
+nav{
+  display: flex;
+  justify-content: space-evenly;
+}
+.flexpaints{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+.product{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-shadow: 0 0 2px #ffffff;
+  border-radius: 50%;
+  width:30%;
+}
+.colorPreview{
+  height: 50px;
+}
+.rounded{
+  border-radius: 25%;
+}
+.tags{
+  border-radius: 50%;
+}
+.review{
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.productDisplayOuter{
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-around;
+  /* border:solid black 1px; */
+  border-radius: 30px;
+}
+.productDisplayInner{
+  background-color: #ffffff;
+}
+.rainbow:nth-child(6n+1) {
+  background-color: rgb(255, 195, 225);
+}
+.rainbow:nth-child(6n+2) {
+  background-color: rgb(255, 226, 167);
+}
+.rainbow:nth-child(6n+3) {
+  background-color: rgb(255, 250, 157);
+}
+.rainbow:nth-child(6n+4) {
+  background-color: rgb(198, 248, 166);
+}
+.rainbow:nth-child(6n+5) {
+  background-color: rgb(175, 226, 255);
+}
+.rainbow:nth-child(6n) {
+  background-color: rgb(227, 182, 251);
 }

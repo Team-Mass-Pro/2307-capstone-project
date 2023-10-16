@@ -16,7 +16,7 @@ const Orders = ({ orders, products, lineItems })=> {
               return total + lineItem.quantity * product.price;
             }, 0);
             return (
-              <li key={ order.id }>
+              <li key={ order.id } className="rainbow">
                 ({ new Date(order.created_at).toLocaleString() })
                 <ul>
                   {

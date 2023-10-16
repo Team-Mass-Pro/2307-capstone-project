@@ -4,13 +4,13 @@ import { Link } from 'react-router-dom';
 
 const Wishlist = ({product, wishlist, createWishlist, deleteWishlist}) => {
   return (
-    <div>
+    <span>
       {
-        wishlist ? <button onClick={ () => deleteWishlist(wishlist)}>Remove From Wishlist</button> 
-        : <button onClick = { () => createWishlist ({ product_id: product.id}) }>Add to Wishlist</button>
+        wishlist ? <button onClick={ () => deleteWishlist(wishlist)} className="rounded">Remove From Wishlist</button> 
+        : <button onClick = { () => createWishlist ({ product_id: product.id})} className="rounded">Wishlist</button>
       }
-    </div>
-  )
+    </span>
+  ) 
 }
 
 const Products = ({ products, cartItems, createLineItem, updateLineItem, auth, wishlists, createWishlist, deleteWishlist, tags }) => {
@@ -100,34 +100,43 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, auth, w
         Filter by Tag
         {tags.map((t) => {
           return (
-            <button className={'clicked' + activeTags[t.name]} key={t.id} onClick={() => { actTags[t.name] = !actTags[t.name]; setActiveTags(actTags) }}>{t.name}</button>
+            <button className={'clicked' + activeTags[t.name] + ' tags'} key={t.id} onClick={() => { actTags[t.name] = !actTags[t.name]; setActiveTags(actTags) }}>{t.name}</button>
 
           )
         })}
       </div>
-      <ul>
+      <ul className='flexpaints'>
 
         {currentProducts.map((product) => {
           const cartItem = cartItems.find((lineItem) => lineItem.product_id === product.id);
+          const css = `
+            #product${(product.name).replace(" ", "_")}{
+              background-color: rgb(${product.red},${product.green},${product.blue});
+            }
+          `;
           return (
-            <li key={product.id}>
+            
+            <li key={product.id} id={`product${(product.name).replace(" ", "_")}`} className='product'>
+              <style>{css}</style>
               {product.is_vip ? <span className="vip">VIP </span> : ''}
               <Link to={`/products/${product.id}`}>{product.name}</Link> ${product.price}
-              {auth.id ? (
-                cartItem ? (
-                  <button onClick={() => updateLineItem(cartItem)}>Add Another</button>
-                ) : (
-                  <button onClick={() => createLineItem(product)}>Add</button>
-                )
-              ) : null}
-              {auth.is_admin ? <Link to={`/products/${product.id}/edit`}>Edit</Link> : null}
 
               <div>{product.description}</div>
+              
+              {auth.id ? (
+                cartItem ? (
+                  <button onClick={() => updateLineItem(cartItem)} className="rounded">Add Another</button>
+                ) : (
+                  <button onClick={() => createLineItem(product)} className="rounded">Add</button>
+                )
+              ) : null}
               {
                 auth.id ? <Wishlist product={ product } wishlist = { wishlists.find(wishlist => wishlist.product_id === product.id) }
                 createWishlist = { createWishlist } deleteWishlist = { deleteWishlist }
                 />: null
               }
+              
+              {auth.is_admin ? <Link to={`/products/${product.id}/edit`}>Edit</Link> : null}
             </li>
           );
         })}

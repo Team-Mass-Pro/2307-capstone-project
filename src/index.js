@@ -7,6 +7,7 @@ import Product_edit from './Product_edit';
 import Product_create from './Product_create';
 import Orders from './Orders';
 import Orders_all from './Orders_all';
+import Canvas from './Canvas';
 import Cart from './Cart';
 import Login from './Login';
 import Users from './Users';
@@ -220,6 +221,7 @@ const App = ()=> {
               <Link to='/cart'>Cart ({ cartCount })</Link>
               <Link to='/orders'>Orders ({ orders.filter(order => !order.is_cart).length })</Link>
               <Link to='/wishlists'>Wishlist ({ wishlists.length})</Link>
+              <Link to='/canvas'>Canvas</Link>
             </nav>
             <div className="biggishfont">
               Welcome { auth.username }! {auth.is_vip ? "You are a VIP Member": ""}
@@ -309,12 +311,16 @@ const App = ()=> {
               />}
             
             />
-
-              
+ 
             <Route path='/wishlists' element={
               <Wishlists
               wishlists = { wishlists }
               products = { products }
+              />}
+            />
+            <Route path='/canvas' element={
+              <Canvas
+              
               />}
             />
             {auth.is_admin ? <>

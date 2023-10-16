@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useState,useEffect} from 'react'
-import {useParams} from 'react-router-dom';
+import {Link,useParams} from 'react-router-dom';
 
 const Product_edit = ({products,reviews,updateProduct,tags,createTag,deleteReview}) => {
   
@@ -104,6 +104,7 @@ const Product_edit = ({products,reviews,updateProduct,tags,createTag,deleteRevie
           <p>{ "$" +(product.price).toFixed(2)}</p>
         </div>
         </div>
+        <Link to={`/products/${product.id}`}>To Product Display Page</Link>
         <form onSubmit={ save } className='productForm'>
           <h2>EDIT PRODUCT</h2>
           <label>Is VIP:<input type='checkbox' checked={vip} onChange={ () => setVIP(!vip)}/></label>

@@ -92,6 +92,18 @@ nav{
   /* border:solid black 1px; */
   border-radius: 30px;
 }
+.canvasFlex{
+  margin: 0;
+  display: flex;
+}
+.pane{
+  margin: 0;
+  width:30px;
+  height:30px;
+}
+#canvas{
+  margin-top: 10px;
+}
 .productDisplayInner{
   background-color: #ffffff;
 }

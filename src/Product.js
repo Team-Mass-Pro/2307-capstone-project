@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useState} from 'react'
-import {useParams} from 'react-router-dom';
+import {Link,useParams} from 'react-router-dom';
 
 const Product = ({products,reviews,auth,createReview}) => {
     const [text, setText] = useState('');
@@ -44,6 +44,7 @@ const Product = ({products,reviews,auth,createReview}) => {
         </div>
         </div>
         <style>{css}</style>
+        {auth.is_admin ? <Link to={`/products/${product.id}/edit`}>To Edit Page</Link> : null}
         <h3>Reviews for {product.name}:</h3>
   
         <ul>

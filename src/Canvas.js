@@ -53,6 +53,7 @@ return(
     <div className="colorPreview"></div>
     <style>{css}</style>
     {gridOn?<style>{grid}</style>:''}
+    <div id='centerCanvas'>
     <div id='canvas'>
         {[...Array(20)].map((row, x) =>
             <div key={`canvasRow${x}`} id={`canvasRow${x}`} className="canvasFlex">
@@ -61,6 +62,7 @@ return(
                 )}
             </div>
         )}
+    </div>
     </div>
     </div>
 )

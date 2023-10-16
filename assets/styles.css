@@ -104,6 +104,10 @@ nav{
 #canvas{
   margin-top: 10px;
 }
+#centerCanvas{
+  display: flex;
+  justify-content: space-evenly;
+}
 .productDisplayInner{
   background-color: #ffffff;
 }

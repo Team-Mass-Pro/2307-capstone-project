@@ -7,6 +7,7 @@ import Orders from './Orders';
 import Cart from './Cart';
 import Login from './Login';
 import Users from './Users';
+import Settings from './Settings';
 import api from './api';
 
 const App = ()=> {
@@ -150,6 +151,9 @@ const App = ()=> {
       window.alert('Username Already Exists');
     }
   }
+  const Settings = ()=> {
+    navigate (`/settings`)
+  }
   
   const logout = ()=> {
     api.logout(setAuth);
@@ -169,6 +173,7 @@ const App = ()=> {
               <span>
                 Welcome { auth.username }! {auth.is_vip ? "You are a VIP Member": ""}
                 <button onClick={ logout }>Logout</button>
+                <button onClick={ Settings }>Settings</button>
               </span>
             </nav>
             {auth.is_admin ? <div className='adminNav'><h6>Admin Tools</h6><nav><Link to='/users'>Users</Link></nav></div> : ''}
@@ -256,6 +261,13 @@ const App = ()=> {
                 />}
               />
               </> : ''}
+              <Route path='/settings' element={
+                <Settings
+                users = {users}
+                updateUser = {updateUser}
+                />}
+              />
+            
 
             </Routes>
             </main>

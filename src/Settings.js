@@ -2,19 +2,23 @@ import React, { useState } from 'react';
 
 const Settings = ({users, updateuser, auth, setAuth}) => {
 
-    const [username, setUsername] = useState('');
+    const [username, setUsername] = useState(auth.username);
     const [password, setPassword] = useState('');
+const save = (ev) => {
 
+    ev.preventDefault();
+    console.log(username);
+};
+// todo: move to axios
     return (
         <div className='Settings'>
             <div className='Userinfobox'>
-                <h1>fddgdg</h1>
+                <h2>Username: </h2>
                 <div className='Userinfo'>
-                    <li class='user'>
-                        <form method="POST" action='/updateUser'>
-                            Username: ${fff}
-                        </form>
-                    </li>
+                    <form onSubmit={save}>
+                        <input value={username} onChange={ev => setUsername(ev.target.value)}/>
+                        <button disabled={!username || username === auth.username}>update</button> 
+                    </form>
                 </div>
 
             </div>
@@ -25,7 +29,7 @@ const Settings = ({users, updateuser, auth, setAuth}) => {
 
 
 
-}
+};
 
 
 

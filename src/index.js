@@ -166,6 +166,10 @@ const App = ()=> {
     await api.removeFromCart({ lineItem, lineItems, setLineItems, lineItemsAll, setLineItemsAll });
   };
 
+  const deleteReview = async(review)=> {
+    await api.deleteReview({ review, reviews ,setReviews});
+  };
+
   const updateUser = async(user)=> {
     await api.updateUser({ user, setUsers });
   };
@@ -185,6 +189,7 @@ const App = ()=> {
 
   const login = async(credentials)=> {
     await api.login({ credentials, setAuth });
+    navigate(`/`);
   }
 
   const register = async(user)=> {
@@ -204,7 +209,7 @@ const App = ()=> {
     navigate(`/`);
   }
   return (
-    <div>
+    <div id='foreground'>
       <h1>PAINT SHOP</h1>
       {
         auth.id ? (
@@ -215,11 +220,11 @@ const App = ()=> {
               <Link to='/cart'>Cart ({ cartCount })</Link>
               <Link to='/orders'>Orders ({ orders.filter(order => !order.is_cart).length })</Link>
               <Link to='/wishlists'>Wishlist ({ wishlists.length})</Link>
-              <span>
-                Welcome { auth.username }! {auth.is_vip ? "You are a VIP Member": ""}
-                <button onClick={ logout }>Logout</button>
-              </span>
             </nav>
+            <div className="biggishfont">
+              Welcome { auth.username }! {auth.is_vip ? "You are a VIP Member": ""}
+            </div>
+            <button onClick={ logout }>Logout</button>
             {auth.is_admin ? <div className='adminNav'><h6>Admin Tools</h6><nav>
               <Link to='/users'>Users</Link>
               <Link to='/createProduct'>Create Product</Link>
@@ -305,15 +310,7 @@ const App = ()=> {
             
             />
 
-            <Route path='/products/:id/edit' element={ 
-              <Product_edit
-                products = { products }
-                reviews = { reviews }
-                updateProduct ={updateProduct}
-                tags = {tags}
-                createTag = {createTag}
-              />}
-            />      
+              
             <Route path='/wishlists' element={
               <Wishlists
               wishlists = { wishlists }
@@ -349,6 +346,16 @@ const App = ()=> {
                   users = {users}
                 />}
               />
+              <Route path='/products/:id/edit' element={ 
+                <Product_edit
+                  products = { products }
+                  reviews = { reviews }
+                  updateProduct ={updateProduct}
+                  tags = {tags}
+                  createTag = {createTag}
+                  deleteReview = {deleteReview}
+                />}
+              />    
               </> : ''}
 
             </Routes>

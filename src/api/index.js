@@ -133,6 +133,12 @@ const removeFromCart = async({ lineItem, lineItems, setLineItems,  lineItemsAll,
   setLineItemsAll(lineItemsAll.filter( _lineItem => _lineItem.id !== lineItem.id));
 };
 
+const deleteReview = async({ review, reviews, setReviews})=> {
+  const response = await axios.delete(`/api/reviews/${review.id}`, getHeaders());
+  setReviews(reviews.filter( r => r.id !== review.id));
+  console.log("1984");
+};
+
 const attemptLoginWithToken = async(setAuth)=> {
   const token = window.localStorage.getItem('token');
   if(token){
@@ -189,6 +195,7 @@ const api = {
   createTag,
   removeFromCart,
   createReview,
+  deleteReview,
   fetchReviews,
   attemptLoginWithToken
 };

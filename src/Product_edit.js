@@ -3,7 +3,7 @@ import React from 'react';
 import { useState,useEffect} from 'react'
 import {useParams} from 'react-router-dom';
 
-const Product_edit = ({products,reviews,updateProduct,tags,createTag}) => {
+const Product_edit = ({products,reviews,updateProduct,tags,createTag,deleteReview}) => {
   
     const [newtag, setNewTag] = useState("");
     const [name, setName] = useState("");
@@ -11,6 +11,9 @@ const Product_edit = ({products,reviews,updateProduct,tags,createTag}) => {
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState(0);
     const [activeTags, setActiveTags] = useState({});
+    const [red, setRed] = useState(0);
+    const [green, setGreen] = useState(0);
+    const [blue, setBlue] = useState(0);
 
     useEffect(()=> {
       const setData = ()=> {
@@ -24,7 +27,9 @@ const Product_edit = ({products,reviews,updateProduct,tags,createTag}) => {
         setVIP(product.is_vip);
         setDescription(product.description);
         setPrice(product.price);
-
+        setRed(product.red);
+        setGreen(product.green);
+        setBlue(product.blue);
       };
       setData();
     }, [products]);
@@ -64,7 +69,16 @@ const Product_edit = ({products,reviews,updateProduct,tags,createTag}) => {
         isSame = false;
       }
     });
-    
+    const css = `
+    .productDisplayOuter{
+      background-color: rgb(${product.red},${product.green},${product.blue});
+      border:solid rgb(${product.red},${product.green},${product.blue}) 1px;
+    }
+    .colorPreview{
+      background-color: rgb(${red},${green},${blue});
+    }
+    `;
+
     const save = (ev)=> {
        ev.preventDefault();
        let tags = ' ';
@@ -77,20 +91,27 @@ const Product_edit = ({products,reviews,updateProduct,tags,createTag}) => {
         tags += "vip ";
        }
        console.log(tags);
-       const produck = {name,description,price:price*1,id:product.id,is_vip:vip,tags};
+       const produck = {name,description,price:price*1,id:product.id,is_vip:vip,tags,red,green,blue};
        updateProduct(produck);
     }
   
     return(
       <div>
-        <h3>{product.is_vip ? 'VIP ':'' }{product.name}</h3>
-        <p>{product.description}</p>
-        <p>{ "$" +(product.price).toFixed(2)}</p>
-        
+        <div className="productDisplayOuter">
+        <div className="productDisplayInner">
+          <h3>{product.is_vip ? 'VIP ':'' }{product.name}</h3>
+          <p>{product.description}</p>
+          <p>{ "$" +(product.price).toFixed(2)}</p>
+        </div>
+        </div>
         <form onSubmit={ save } className='productForm'>
           <h2>EDIT PRODUCT</h2>
           <label>Is VIP:<input type='checkbox' checked={vip} onChange={ () => setVIP(!vip)}/></label>
           <label>Change name:<input value={ name } onChange={ ev => setName(ev.target.value)}/></label>
+          <label>Change Color</label>
+          <label>Red:<input type="number" min="0" max="255" value={ red } onChange={ ev => setRed(ev.target.value)}/> Green:<input type="number" min="0" max="255" value={ green } onChange={ ev => setGreen(ev.target.value)}/> Blue:<input type="number" min="0" max="255" value={ blue } onChange={ ev => setBlue(ev.target.value)}/></label>
+          <div className="colorPreview"></div>
+          <style>{css}</style>
           <label>Change description:</label>
           <textarea
             rows="6"
@@ -110,7 +131,7 @@ const Product_edit = ({products,reviews,updateProduct,tags,createTag}) => {
           <button disabled={newtag === '' || newtag.includes(' ')} type='button' onClick={() => {createTag({name:newtag});setNewTag('')}}>+</button>
           <span className='smol'>{'(no spaces allowed)'}</span>
           </div>
-          <button disabled={name === "" || description === "" || (name === product.name && description === product.description && price*1 === product.price*1 && vip === product.is_vip && isSame)}>EDIT PRODUCT</button>
+          <button disabled={name === "" || description === "" || (name === product.name && description === product.description && price*1 === product.price*1 && vip === product.is_vip && red*1 === product.red*1 && green*1 === product.green*1 && blue*1 === product.blue*1 && isSame)}>EDIT PRODUCT</button>
         </form>
 
         <h2>DELETE REVIEWS</h2>
@@ -130,6 +151,7 @@ const Product_edit = ({products,reviews,updateProduct,tags,createTag}) => {
               <div>
                 By {r.author}
               </div>
+              <button onClick={ ()=> deleteReview(r)}>X</button>
             </li>
           )
         })}

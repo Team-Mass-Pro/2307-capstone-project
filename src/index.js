@@ -12,6 +12,7 @@ import Cart from './Cart';
 import Login from './Login';
 import Users from './Users';
 import api from './api';
+import Settings from './Settings';
 import Wishlists from './Wishlists';
 import Wishlists_all from './Wishlists_all';
 
@@ -210,6 +211,11 @@ const App = ()=> {
     setUsers([]);
     navigate(`/`);
   }
+
+  const goToSettings = ()=> {
+    navigate (`/settings`)
+  }
+
   return (
     <div id='foreground'>
       <h1>PAINT SHOP</h1>
@@ -228,6 +234,7 @@ const App = ()=> {
               Welcome { auth.username }! {auth.is_vip ? "You are a VIP Member": ""}
             </div>
             <button onClick={ logout }>Logout</button>
+            <button onClick={ goToSettings }>Settings</button>
             {auth.is_admin ? <div className='adminNav'><h6>Admin Tools</h6><nav>
               <Link to='/users'>Users</Link>
               <Link to='/createProduct'>Create Product</Link>
@@ -312,7 +319,14 @@ const App = ()=> {
               />}
             
             />
- 
+            <Route path='/settings' element={
+                <Settings
+                users = {users}
+                updateUser = {updateUser}
+                auth = { auth }
+                setAuth= { setAuth }
+                />}
+              />
             <Route path='/wishlists' element={
               <Wishlists
               wishlists = { wishlists }

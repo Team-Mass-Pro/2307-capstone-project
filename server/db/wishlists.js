@@ -6,8 +6,18 @@ const fetchWishlists = async(userId)=> {
   const SQL = `
     SELECT * FROM wishlists
     WHERE user_id = $1
+    
   `;
   const response = await client.query(SQL, [ userId ]);
+  return response.rows;
+};
+
+const fetchWishlistsAll = async()=> {
+  const SQL = `
+    SELECT * FROM wishlists
+    ORDER BY product_id
+  `;
+  const response = await client.query(SQL);
   return response.rows;
 };
 
@@ -40,6 +50,7 @@ const updateWishlist = async(wishlist)=> {
 
 module.exports = {
   fetchWishlists,
+  fetchWishlistsAll,
   createWishlist,
   deleteWishlist,
   updateWishlist

@@ -2,9 +2,14 @@
   <head>
     <title>The Store</title>
     <link rel='stylesheet' href='/assets/styles.css' />
+    <script>
+    window.REACT_APP_GOOGLE_API_KEY = '<%= REACT_APP_GOOGLE_API_KEY %>';
+
+    </script>
     <script defer src='/dist/main.js'></script>
   </head>
   <body>
+    <%= REACT_APP_GOOGLE_API_KEY %>
     <div id='root'></div>
   </body>
 </html>

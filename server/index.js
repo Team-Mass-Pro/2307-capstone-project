@@ -1,3 +1,14 @@
+try {
+  require('../env'); // Load environment variables
+} 
+catch(ex){
+  console.log(`
+  If running locally add env.js file to root directory
+  set REACT_APP_GOOGLE_API_KEY
+  `)
+};
+
+
 const {
   seed,
   client,

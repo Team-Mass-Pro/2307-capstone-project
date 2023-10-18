@@ -1,6 +1,7 @@
     const {
     createReview,
-    fetchReviews
+    fetchReviews,
+    deleteReview
   } = require('../db');
   
   const express = require('express');
@@ -25,6 +26,16 @@
       next(ex);
     }
   });
-  
+
+  app.delete('/:id', isLoggedIn, isAdmin, async(req, res, next)=> {
+    try {
+      //TODO make sure the order's user_id is req.user.id 
+      await deleteReview({ id: req.params.id });
+      res.sendStatus(204);
+    }
+    catch(ex){
+      next(ex);
+    }
+  });
   module.exports = app;
   

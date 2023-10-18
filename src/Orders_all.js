@@ -1,22 +1,23 @@
 import React from 'react';
 
-const Orders = ({ orders, products, lineItems })=> {
+const Orders_all = ({ ordersAll, products, lineItemsAll, users })=> {
 
   return (
     <div>
-      <h2>Orders</h2>
-      <ul>
-        {
-          
-          orders.filter(order => !order.is_cart).map( order => {
-            const orderLineItems = lineItems.filter(lineItem => lineItem.order_id === order.id);
+      <h2>All Orders on Site</h2>
+      {ordersAll.map( order => {
+            const orderLineItems = lineItemsAll.filter(lineItem => lineItem.order_id === order.id);
+
             //-Eli Calculate the total for this order
             const orderTotal = orderLineItems.reduce((total, lineItem) => {
               const product = products.find((product) => product.id === lineItem.product_id) || {};
               return total + lineItem.quantity * product.price;
             }, 0);
+            if(orderLineItems.length === 0){return}
             return (
-              <li key={ order.id } className="rainbow">
+              <li key={ order.id }>
+                <h3>Order Made By {users.length?(users.find((u)=> u.id === order.user_id)).username:''}</h3>
+                <h4>{order.is_cart ? "THIS ORDER IS STILL IN CART":""}</h4>
                 ({ new Date(order.created_at).toLocaleString() })
                 <ul>
                   {
@@ -37,10 +38,9 @@ const Orders = ({ orders, products, lineItems })=> {
               </li>
             );
           })
-        }
-      </ul>
+          }
     </div>
   );
 };
 
-export default Orders;
+export default Orders_all;

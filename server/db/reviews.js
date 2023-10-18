@@ -20,9 +20,17 @@ const fetchReviews = async () => {
   const response = await client.query(SQL);
   return response.rows;
 };
+const deleteReview = async(review)=> {
 
+  const SQL = `
+    DELETE from reviews
+    WHERE id = $1
+  `;
+  await client.query(SQL, [review.id]);
+};
 
 module.exports = {
   createReview,
-  fetchReviews
+  fetchReviews,
+  deleteReview
 };

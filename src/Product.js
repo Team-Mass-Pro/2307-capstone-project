@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useState} from 'react'
-import {useParams} from 'react-router-dom';
+import {Link,useParams} from 'react-router-dom';
 
 const Product = ({products,reviews,auth,createReview}) => {
     const [text, setText] = useState('');
@@ -12,6 +12,14 @@ const Product = ({products,reviews,auth,createReview}) => {
     if(!product){
       return null;
     }
+
+    const css = `
+    .productDisplayOuter{
+      background-color: rgb(${product.red},${product.green},${product.blue});
+      border:solid rgb(${product.red},${product.green},${product.blue}) 1px;
+    }
+    `;
+
     const save = (ev)=> {
        ev.preventDefault();
        const review = {
@@ -27,15 +35,22 @@ const Product = ({products,reviews,auth,createReview}) => {
   
     return(
       <div>
-        <h1>{product.name}</h1>
-        <p>{product.description}</p>
-        <p>{ "$" +(product.price).toFixed(2)}</p>
+        
+        <div className="productDisplayOuter">
+        <div className="productDisplayInner">
+          <h1>{product.name}</h1>
+          <p>{product.description}</p>
+          <p>{ "$" +(product.price).toFixed(2)}</p>
+        </div>
+        </div>
+        <style>{css}</style>
+        {auth.is_admin ? <Link to={`/products/${product.id}/edit`}>To Edit Page</Link> : null}
         <h3>Reviews for {product.name}:</h3>
   
         <ul>
         {productReviews.map( r => {
           return(
-            <li key={ r.id }>
+            <li key={ r.id } className='review'>
               <div>
               {`${r.text} `}
               </div>

@@ -9,20 +9,32 @@ const Product_create = ({createProduct}) => {
     const [vip,setVIP] = useState(false);
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState(0);
+    const [red, setRed] = useState(0);
+    const [green, setGreen] = useState(0);
+    const [blue, setBlue] = useState(0);
+
+    const css = `
+    .colorPreview{
+      background-color: rgb(${red},${green},${blue});
+    }
+    `;
 
     const save = (ev)=> {
        ev.preventDefault();
-      //  console.log(vip)
-      //const produck = {name,description,price:price*1,id:product.id,is_vip:vip};
-      createProduct({name,description,price:price*1,is_vip:vip,tags:""});
-
-      //  updateProduct(produck);
+       let tags = "";
+       if(vip){
+        tags = " vip ";
+       }
+      createProduct({name,description,price:price*1,is_vip:vip,tags,red,green,blue});
     }
     return(
       <div>
         <form onSubmit={ save } className='productForm'>
           <h2>CREATE PRODUCT</h2>
           <label>Name:<input value={ name } onChange={ ev => setName(ev.target.value)}/></label>
+          <label>Red:<input type="number" min="0" max="255" value={ red } onChange={ ev => setRed(ev.target.value)}/> Green:<input type="number" min="0" max="255" value={ green } onChange={ ev => setGreen(ev.target.value)}/> Blue:<input type="number" min="0" max="255" value={ blue } onChange={ ev => setBlue(ev.target.value)}/></label>
+          <div className="colorPreview"></div>
+          <style>{css}</style>
           <label>Is VIP:<input type='checkbox' checked={vip} onChange={ () => setVIP(!vip)}/></label>
           <label>Description:</label>
           <textarea

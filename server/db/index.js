@@ -181,10 +181,8 @@ const seed = async () => {
 
   let orders = await fetchOrders(ethyl.id);
   let cart = orders.find(order => order.is_cart);
-  let lineItem = await createLineItem({ order_id: cart.id, product_id: foo.id });
-  lineItem.quantity++;
-  await updateLineItem(lineItem);
-  lineItem = await createLineItem({ order_id: cart.id, product_id: bar.id });
+  let lineItem = await createLineItem({ order_id: cart.id, product_id: foo.id, quantity: 2});
+  lineItem = await createLineItem({ order_id: cart.id, product_id: bar.id, quantity: 1});
   cart.is_cart = false;
   await updateOrder(cart);
 };

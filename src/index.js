@@ -14,19 +14,23 @@ import Users from './Users';
 import api from './api';
 import Wishlists from './Wishlists';
 import Wishlists_all from './Wishlists_all';
+import TempCart from './TempCart';
 
 const App = ()=> {
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
-  const [ordersAll, setOrdersAll] = useState([]);
+  const [ordersAll, setOrdersAll] = useState([]);//for admin
   const [lineItems, setLineItems] = useState([]);
-  const [lineItemsAll, setLineItemsAll] = useState([]);
+  const [lineItemsAll, setLineItemsAll] = useState([]);//for admin
   const [reviews, setReviews] = useState([]);
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState([]);//for admin
   const [auth, setAuth] = useState({});
   const [wishlists, setWishlists] = useState([]);
-  const [wishlistsAll, setWishlistsAll] = useState([]);
+  const [wishlistsAll, setWishlistsAll] = useState([]);//for admin
   const [tags, setTags] = useState([]);
+  const [canvas, setCanvas] = useState(new Array(400));
+  const [tempCart, setTempCart] = useState([]);
+
   const navigate = useNavigate();
 
   const attemptLoginWithToken = async()=> {
@@ -54,7 +58,7 @@ const App = ()=> {
   }, [auth]);
 
   useEffect(()=> {
-    if(auth.id){
+    if(auth.is_admin){
       const fetchData = async()=> {
         await api.fetchOrdersAll(setOrdersAll);
       };
@@ -72,7 +76,7 @@ const App = ()=> {
   }, [auth]);
 
   useEffect(()=> {
-    if(auth.id){
+    if(auth.is_admin){
       const fetchData = async()=> {
         await api.fetchLineItemsAll(setLineItemsAll);
       };
@@ -90,7 +94,7 @@ const App = ()=> {
   }, [auth]);
   
   useEffect(()=> {
-    if(auth.id){
+    if(auth.is_admin){
       const fetchData = async()=> {
         await api.fetchWishlistsAll(setWishlistsAll);
       };
@@ -124,7 +128,7 @@ const App = ()=> {
   }, [auth]);
   
   useEffect(()=> {
-    if(auth.id){
+    if(auth.is_admin){
       const fetchData = async()=> {
         await api.fetchUsers(setUsers);
       };
@@ -133,8 +137,11 @@ const App = ()=> {
   }, [auth]);
 
 
-  const createLineItem = async(product)=> {
-    await api.createLineItem({ product, cart, lineItems, setLineItems, lineItemsAll, setLineItemsAll });
+  const createLineItem = async(product,quantity)=> {
+    if(quantity === undefined){
+      quantity = 1;
+    }
+    await api.createLineItem({ product, quantity, cart, lineItems, setLineItems, lineItemsAll, setLineItemsAll });
   };
 
   const createProduct = async(product)=> {
@@ -155,10 +162,19 @@ const App = ()=> {
     await api.updateLineItem({ lineItem, cart, lineItems, setLineItems, lineItemsAll, setLineItemsAll  });
   };
 
+  const manualFetch = async()=> {
+    await api.fetchOrders(setOrders);
+    await api.fetchLineItems(setLineItems);
+    if(auth.is_admin){
+      await api.fetchOrdersAll(setOrdersAll);
+      await api.fetchLineItemsAll(setLineItemsAll);
+    }
+  };
+
   const updateOrder = async(order)=> {
     await api.updateOrder({ order, setOrders, setOrdersAll});
   };
-
+  
   const updateProduct = async(product)=> {
     await api.updateProduct({ product, setProducts});
   };
@@ -175,18 +191,42 @@ const App = ()=> {
     await api.updateUser({ user, setUsers });
   };
 
-  const cart = orders.find(order => order.is_cart) || {};
+  let cart = orders.find(order => order.is_cart) || {};
 
-  const cartItems = lineItems.filter(lineItem => lineItem.order_id === cart.id);
+  let cartItems = lineItems.filter(lineItem => lineItem.order_id === cart.id);
 
   const cartCount = cartItems.reduce((acc, item)=> {
     return acc += item.quantity;
   }, 0);
 
+  const combineCarts = async()=> {
+    tempCart.forEach((item)=>{
+      const lineItemtoCombine = cartItems.find(lineI => lineI.product_id === item.product_id);
+      
+      if(lineItemtoCombine === undefined){
+        createLineItem(products.find(p => p.id === item.product_id),item.quantity);
+      }
+      else{
+        lineItemtoCombine.quantity += (item.quantity - 1);
+        updateLineItem(lineItemtoCombine);
+      }
+    });
+
+    setTempCart([]);
+    await manualFetch();
+  }
+
+  if(tempCart.length && Object.keys(cart).length && products.length){
+    
+    combineCarts();
+  }
+
   const createReview = async(review)=> {
     await api.createReview(review,reviews,setReviews);
-    
+    await api.fetchOrdersAll(setOrdersAll);
+
   }
+
 
   const login = async(credentials)=> {
     await api.login({ credentials, setAuth });
@@ -194,7 +234,6 @@ const App = ()=> {
   }
 
   const register = async(user)=> {
-    //console.log(user);
     try{
     await api.register(user);
     window.alert('New User Created');
@@ -207,6 +246,7 @@ const App = ()=> {
   const logout = ()=> {
     api.logout(setAuth);
     setUsers([]);
+    setOrders([]);
     navigate(`/`);
   }
   return (
@@ -320,7 +360,9 @@ const App = ()=> {
             />
             <Route path='/canvas' element={
               <Canvas
-              
+              products={products}
+              canvas={canvas}
+              setCanvas={setCanvas}
               />}
             />
             {auth.is_admin ? <>
@@ -335,6 +377,8 @@ const App = ()=> {
               <Route path='/createProduct' element={ 
                 <Product_create
                   createProduct ={createProduct}
+                  tags = {tags}
+                  createTag = {createTag}
                 />}
               />
               <Route path='/allOrders' element={ 
@@ -380,6 +424,13 @@ const App = ()=> {
               createWishlist = { createWishlist }
               deleteWishlist = { deleteWishlist }
               tags = { tags }
+              tempCart={tempCart}
+              setTempCart={setTempCart}
+            />
+            <TempCart
+              tempCart={tempCart}
+              setTempCart={setTempCart}
+              products={ products }
             />
           </div>
         )

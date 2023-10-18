@@ -13,7 +13,7 @@ const Wishlist = ({product, wishlist, createWishlist, deleteWishlist}) => {
   ) 
 }
 
-const Products = ({ products, cartItems, createLineItem, updateLineItem, auth, wishlists, createWishlist, deleteWishlist, tags }) => {
+const Products = ({ products, cartItems, createLineItem, updateLineItem, auth, wishlists, createWishlist, deleteWishlist, tags, tempCart, setTempCart }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [bookmarkedSearchTerm, setBookmarkedSearchTerm] = useState('');
   const [activeTags, setActiveTags] = useState({});
@@ -119,7 +119,7 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, auth, w
             <li key={product.id} id={`product${(product.name).replace(" ", "_")}`} className='product'>
               <style>{css}</style>
               {product.is_vip ? <span className="vip">VIP </span> : ''}
-              <Link to={`/products/${product.id}`}>{product.name}</Link> ${product.price}
+              {auth.id ? <Link to={`/products/${product.id}`}>{product.name}</Link> : product.name} ${product.price}
 
               <div>{product.description}</div>
               
@@ -129,7 +129,12 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, auth, w
                 ) : (
                   <button onClick={() => createLineItem(product)} className="rounded">Add</button>
                 )
-              ) : null}
+              ) : 
+                tempCart.find((lineItem) => lineItem.product_id === product.id) ? (
+                <button onClick={() =>setTempCart(tempCart.map((lineItem) => lineItem.product_id === product.id ? {product_id:product.id,quantity:lineItem.quantity+1}:lineItem))} className="rounded">Add Another</button>
+              ) : (
+                <button onClick={() =>setTempCart([...tempCart,{product_id:product.id,quantity:1}])} className="rounded">Add</button>
+              )}
               {
                 auth.id ? <Wishlist product={ product } wishlist = { wishlists.find(wishlist => wishlist.product_id === product.id) }
                 createWishlist = { createWishlist } deleteWishlist = { deleteWishlist }

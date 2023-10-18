@@ -1,5 +1,4 @@
 import axios from 'axios';
-import Wishlists_all from '../Wishlists_all';
 
 const getHeaders = ()=> {
   return {
@@ -80,10 +79,11 @@ const fetchUsers = async(setUsers)=> {
   }
 }
 
-const createLineItem = async({ product, cart, lineItems, setLineItems, lineItemsAll, setLineItemsAll })=> {
+const createLineItem = async({ product, quantity, cart, lineItems, setLineItems, lineItemsAll, setLineItemsAll })=> {
   const response = await axios.post('/api/lineItems', {
     order_id: cart.id,
-    product_id: product.id
+    product_id: product.id,
+    quantity: quantity
   }, getHeaders());
   setLineItems([...lineItems, response.data]);
   setLineItemsAll([...lineItemsAll, response.data]);

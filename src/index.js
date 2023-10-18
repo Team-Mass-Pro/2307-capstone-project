@@ -12,9 +12,12 @@ import Cart from './Cart';
 import Login from './Login';
 import Users from './Users';
 import api from './api';
+import Settings from './Settings';
 import Wishlists from './Wishlists';
 import Wishlists_all from './Wishlists_all';
+
 import TempCart from './TempCart';
+import OrdersMap from './OrdersMap';
 
 const App = ()=> {
   const [products, setProducts] = useState([]);
@@ -32,6 +35,7 @@ const App = ()=> {
   const [tempCart, setTempCart] = useState([]);
 
   const navigate = useNavigate();
+
 
   const attemptLoginWithToken = async()=> {
     await api.attemptLoginWithToken(setAuth);
@@ -116,6 +120,10 @@ const App = ()=> {
 
   const deleteWishlist = async(wishlist)=> {
     await api.deleteWishlist({ wishlist, wishlists, setWishlists,wishlistsAll,setWishlistsAll });
+  };
+
+  const updateWishlist = async(wishlist)=> {
+    await api.updateWishlist({wishlist, wishlists, setWishlists })
   };
 
   useEffect(()=> {
@@ -249,6 +257,11 @@ const App = ()=> {
     setOrders([]);
     navigate(`/`);
   }
+
+  const goToSettings = ()=> {
+    navigate (`/settings`)
+  }
+
   return (
     <div id='foreground'>
       <h1>PAINT SHOP</h1>
@@ -267,11 +280,13 @@ const App = ()=> {
               Welcome { auth.username }! {auth.is_vip ? "You are a VIP Member": ""}
             </div>
             <button onClick={ logout }>Logout</button>
+            <button onClick={ goToSettings }>Settings</button>
             {auth.is_admin ? <div className='adminNav'><h6>Admin Tools</h6><nav>
               <Link to='/users'>Users</Link>
               <Link to='/createProduct'>Create Product</Link>
               <Link to='/allOrders'>Show Everyone's Order</Link>
               <Link to='/allWishlists'>Show All Wishlists</Link>
+              <Link to='/orders-map'>Show Order History Map</Link>
               </nav></div> : ''}
             <main>
             <Routes>
@@ -307,6 +322,7 @@ const App = ()=> {
               <Wishlists
                 wishlists = { wishlists }
                 products = { products }
+                deleteWishlist = { deleteWishlist }
               />
             </>
             }
@@ -351,11 +367,20 @@ const App = ()=> {
               />}
             
             />
- 
+            <Route path='/settings' element={
+                <Settings
+                users = {users}
+                updateUser = {updateUser}
+                auth = { auth }
+                setAuth= { setAuth }
+                />}
+              />
             <Route path='/wishlists' element={
               <Wishlists
               wishlists = { wishlists }
               products = { products }
+              deleteWishlist = { deleteWishlist }
+              updateWishlist = { updateWishlist }
               />}
             />
             <Route path='/canvas' element={
@@ -405,7 +430,13 @@ const App = ()=> {
                   createTag = {createTag}
                   deleteReview = {deleteReview}
                 />}
-              />    
+              />
+                  <Route path="/orders-map" element={
+                  <OrdersMap 
+                  orders={ordersAll} 
+                  />} 
+                  />
+
               </> : ''}
 
             </Routes>
@@ -423,6 +454,7 @@ const App = ()=> {
               wishlists = { wishlists }
               createWishlist = { createWishlist }
               deleteWishlist = { deleteWishlist }
+              updateWishlist = { updateWishlist }
               tags = { tags }
               tempCart={tempCart}
               setTempCart={setTempCart}

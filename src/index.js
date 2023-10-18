@@ -116,6 +116,10 @@ const App = ()=> {
     await api.deleteWishlist({ wishlist, wishlists, setWishlists,wishlistsAll,setWishlistsAll });
   };
 
+  const updateWishlist = async(wishlist)=> {
+    await api.updateWishlist({wishlist, wishlists, setWishlists })
+  };
+
   useEffect(()=> {
     if(auth.id){
       const fetchData = async()=> {
@@ -275,6 +279,7 @@ const App = ()=> {
               <Wishlists
                 wishlists = { wishlists }
                 products = { products }
+                deleteWishlist = { deleteWishlist }
               />
             </>
             }
@@ -331,6 +336,8 @@ const App = ()=> {
               <Wishlists
               wishlists = { wishlists }
               products = { products }
+              deleteWishlist = { deleteWishlist }
+              updateWishlist = { updateWishlist }
               />}
             />
             <Route path='/canvas' element={
@@ -394,6 +401,7 @@ const App = ()=> {
               wishlists = { wishlists }
               createWishlist = { createWishlist }
               deleteWishlist = { deleteWishlist }
+              updateWishlist = { updateWishlist }
               tags = { tags }
             />
           </div>

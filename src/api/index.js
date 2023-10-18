@@ -56,6 +56,15 @@ const deleteWishlist = async({ wishlist, wishlists, setWishlists, wishlistsAll, 
   setWishlistsAll(wishlistsAll.filter( _wishlist => _wishlist.id !== wishlist.id));
 };
 
+const updateWishlist = async({ wishlist, wishlists, setWishlists })=> {
+  console.log(wishlist.rating);
+  const response = await axios.put(`/api/wishlists/${wishlist.id}`, {
+    rating: wishlist.rating -1
+  }, getHeaders());
+  setWishlists(wishlists.map( wishlist => wishlist.id == response.data.id ? response.data: wishlist));
+  console.log(wishlist.rating)
+}
+
 const fetchReviews = async(setReviews)=> {
   const response = await axios.get('/api/reviews', getHeaders());
   setReviews(response.data);
@@ -188,6 +197,7 @@ const api = {
   fetchWishlistsAll,
   createWishlist,
   deleteWishlist,
+  updateWishlist,
   updateOrder,
   updateUser,
   updateProduct,

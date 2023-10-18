@@ -37,9 +37,21 @@ const deleteWishlist = async(wishlist)=> {
   await client.query(SQL, [wishlist.id, wishlist.user_id]);
 };
 
+const updateWishlist = async(wishlist)=> {
+  const SQL = `
+  UPDATE wishlists
+  SET rating = $1 
+  WHERE id = $2 AND user_id = $3
+  RETURNING *
+  `;
+  const response = await client.query(SQL, [wishlist.rating, wishlist.id, wishlist.user_id]);
+  return response.rows[0];
+}
+
 module.exports = {
   fetchWishlists,
   fetchWishlistsAll,
   createWishlist,
-  deleteWishlist
+  deleteWishlist,
+  updateWishlist
 };

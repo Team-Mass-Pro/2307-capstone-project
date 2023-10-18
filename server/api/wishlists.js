@@ -4,7 +4,6 @@ const {
     deleteWishlist,
     updateWishlist,
     fetchWishlistsAll,
-    deleteWishlist
   } = require('../db');
   
 const express = require('express');

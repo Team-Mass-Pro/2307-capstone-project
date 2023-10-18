@@ -1,13 +1,14 @@
 
 import React, { useState} from 'react';
 
-const Canvas = ({})=> {
+const Canvas = ({products,canvas,setCanvas})=> {
 
-const [canvas, setCanvas] = useState(new Array(400));
+//const [canvas, setCanvas] = useState(new Array(400));
 const [gridOn, setGridOn] = useState(true);
 const [red, setRed] = useState(0);
 const [green, setGreen] = useState(0);
 const [blue, setBlue] = useState(0);
+const [isMouseDown, setMouseDown] = useState(false);
 
 let css = `
     .colorPreview{
@@ -45,11 +46,23 @@ const grid = `
     }
 `;
 return(
-    <div>
-    <h1>Pixel Canvas</h1>
+    <div
+    onMouseDown={() => setMouseDown(true)}
+    onMouseUp={() => setMouseDown(false)}
+    >
 
+    <h1>Pixel Canvas</h1>
+    <div>
+    {products.map((p) => {
+        return (
+        <button key={'cs'+p.id} onClick={() => {setRed(p.red);setGreen(p.green);setBlue(p.blue)}}>{p.name}</button>
+
+        )
+    })}
+    </div>
     <label>Red:<input type="number" min="0" max="255" value={ red } onChange={ ev => setRed(ev.target.value)}/> Green:<input type="number" min="0" max="255" value={ green } onChange={ ev => setGreen(ev.target.value)}/> Blue:<input type="number" min="0" max="255" value={ blue } onChange={ ev => setBlue(ev.target.value)}/></label>
     <label>Show Grid<input type='checkbox' checked={gridOn} onChange={ () => setGridOn(!gridOn)}/></label>
+    <div><button type='button' onClick={ () => setCanvas(new Array(400))}>clear</button></div>
     <div className="colorPreview"></div>
     <style>{css}</style>
     {gridOn?<style>{grid}</style>:''}
@@ -58,7 +71,7 @@ return(
         {[...Array(20)].map((row, x) =>
             <div key={`canvasRow${x}`} id={`canvasRow${x}`} className="canvasFlex">
                 {[...Array(20)].map((panel, y) =>
-                <div key={`pane-${x}-${y}-`} id={`pane_${x}_${y}`} className="pane" onMouseDown={()=>colorPanel(x,y)}></div>
+                <div key={`pane-${x}-${y}-`} id={`pane_${x}_${y}`} className="pane" onMouseDown={()=>colorPanel(x,y)} onMouseOver={()=>isMouseDown? colorPanel(x,y):''}></div>
                 )}
             </div>
         )}

@@ -1,7 +1,8 @@
 const {
     createWishlist,
     fetchWishlists,
-    deleteWishlist
+    deleteWishlist,
+    updateWishlist
 
   } = require('../db');
   
@@ -33,6 +34,16 @@ app.delete('/:id', isLoggedIn, async(req, res, next)=> {
     //TODO make sure the wishlist's user_id is req.user.id 
     await deleteWishlist({ id: req.params.id, user_id: req.user.id });
     res.sendStatus(204);
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
+app.put('/:id', isLoggedIn, async(req, res, next)=> {
+  try {
+    //TODO make sure the order's user_id is req.user.id 
+    res.send(await updateWishlist({...req.body, id: req.params.id}));
   }
   catch(ex){
     next(ex);

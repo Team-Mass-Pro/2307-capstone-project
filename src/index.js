@@ -82,6 +82,10 @@ const App = ()=> {
     await api.deleteWishlist({ wishlist, wishlists, setWishlists });
   };
 
+  const updateWishlist = async(wishlist)=> {
+    await api.updateWishlist({wishlist, wishlists, setWishlists })
+  };
+
   useEffect(()=> {
     if(auth.id){
       const fetchData = async()=> {
@@ -280,6 +284,7 @@ const App = ()=> {
               wishlists = { wishlists }
               products = { products }
               deleteWishlist = { deleteWishlist }
+              updateWishlist = { updateWishlist }
               />}
             />
             {auth.is_admin ? <>
@@ -313,6 +318,7 @@ const App = ()=> {
               wishlists = { wishlists }
               createWishlist = { createWishlist }
               deleteWishlist = { deleteWishlist }
+              updateWishlist = { updateWishlist }
               tags = { tags }
             />
           </div>

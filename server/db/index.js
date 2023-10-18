@@ -28,7 +28,8 @@ const {
 const {
   createWishlist,
   fetchWishlists,
-  deleteWishlist
+  deleteWishlist,
+  updateWishlist
 } = require('./wishlists')
 
 const {
@@ -122,7 +123,8 @@ const seed = async () => {
     id UUID PRIMARY KEY,
     user_id UUID REFERENCES users(id) NOT NULL,
     product_id UUID REFERENCES products(id) NOT NULL,
-    CONSTRAINT product_and_user_key UNIQUE(product_id, user_id)
+    CONSTRAINT product_and_user_key UNIQUE(product_id, user_id),
+    rating INTEGER DEFAULT 1
   )
   `;
   await client.query(SQL);
@@ -194,6 +196,7 @@ module.exports = {
   createWishlist,
   fetchWishlists,
   deleteWishlist,
+  updateWishlist,
   updateOrder,
   authenticate,
   findUserByToken,

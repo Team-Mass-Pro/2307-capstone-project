@@ -14,6 +14,8 @@ import Users from './Users';
 import api from './api';
 import Wishlists from './Wishlists';
 import Wishlists_all from './Wishlists_all';
+import OrdersMap from './OrdersMap';
+
 
 const App = ()=> {
   const [products, setProducts] = useState([]);
@@ -233,6 +235,7 @@ const App = ()=> {
               <Link to='/createProduct'>Create Product</Link>
               <Link to='/allOrders'>Show Everyone's Order</Link>
               <Link to='/allWishlists'>Show All Wishlists</Link>
+              <Link to='/orders-map'>Show Order History Map</Link>
               </nav></div> : ''}
             <main>
             <Routes>
@@ -362,7 +365,13 @@ const App = ()=> {
                   createTag = {createTag}
                   deleteReview = {deleteReview}
                 />}
-              />    
+              />
+                  <Route path="/orders-map" element={
+                  <OrdersMap 
+                  orders={ordersAll} 
+                  />} 
+                  />
+
               </> : ''}
 
             </Routes>

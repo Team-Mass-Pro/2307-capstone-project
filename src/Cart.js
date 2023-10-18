@@ -9,7 +9,7 @@ const Cart = ({ updateOrder, removeFromCart, lineItems, cart, products,updateLin
 
 const loadGoogleMapsScript = (callback) => {
   console.log(callback);
-  const apiKey = window.REACT_APP_GOOGLE_API_KEY; // Google places API key
+  const apiKey = REACT_APP_GOOGLE_API_KEY; // Google places API key
   const script = document.createElement('script');
   script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
   script.defer = true;

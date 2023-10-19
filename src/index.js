@@ -260,6 +260,7 @@ const App = ()=> {
                 wishlists = { wishlists }
                 createWishlist = { createWishlist }
                 deleteWishlist = { deleteWishlist }
+                updateWishlist = { updateWishlist }
                 tags = { tags }
                 />
               <Cart
@@ -280,6 +281,7 @@ const App = ()=> {
                 wishlists = { wishlists }
                 products = { products }
                 deleteWishlist = { deleteWishlist }
+                updateWishlist = { updateWishlist }
               />
             </>
             }
@@ -294,6 +296,7 @@ const App = ()=> {
                 wishlists = { wishlists }
                 createWishlist = { createWishlist }
                 deleteWishlist = { deleteWishlist }
+                updateWishlist = { updateWishlist }
                 tags = { tags }
               />}
             />

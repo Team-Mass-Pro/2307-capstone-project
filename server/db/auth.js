@@ -76,11 +76,12 @@ const fetchUsers = async()=> {
 const updateUser = async(user)=> {
   SQL = `
     UPDATE users
-    SET is_vip = $1
+    SET is_vip = $1,
+    avatar = $3
     WHERE id = $2
     RETURNING *
   `;
-  const response = await client.query(SQL, [user.is_vip, user.id]);
+  const response = await client.query(SQL, [user.is_vip, user.id, user.avatar]);
   return response.rows[0];
 };
 module.exports = {

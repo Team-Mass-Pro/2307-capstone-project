@@ -140,12 +140,14 @@ const seed = async () => {
   const lucyAvatar = await loadAvatar('images/lucy.png');
   const ethylAvatar = await loadAvatar('images/ethyl.png');
 
-  const [moe, lucy, ethyl] = await Promise.all([
+  let [moe, lucy, ethyl] = await Promise.all([
     createUser({ username: 'moe', password: 'm_password', is_admin: false, is_vip: false, avatar: moeAvatar }),
     createUser({ username: 'lucy', password: 'l_password', is_admin: false, is_vip: false, avatar: lucyAvatar }),
     createUser({ username: 'ethyl', password: '1234', is_admin: true, is_vip: true, avatar: ethylAvatar })
   ]);
 
+  moe = await updateUser({...moe, image:moeAvatar});
+ // console.log(moe.avatar);
 
   const [foo, bar, bazz] = await Promise.all([
     createProduct({ name: 'red', price: 10, description: 'color of passion', is_vip: false, tags: ' red primary ', red: 255, green: 0, blue: 0}),
